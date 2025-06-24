@@ -1,3 +1,4 @@
+
 export const mockPosts = [
   {
     id: 1,

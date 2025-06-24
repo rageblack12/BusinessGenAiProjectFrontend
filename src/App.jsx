@@ -9,6 +9,10 @@ import MyComplaints from './components/user/MyComplaints';
 import RaiseComplaint from './components/user/RaiseComplaint';
 import Navbar from './components/shared/Navbar';
 import { AuthProvider } from './context/AuthContext'; 
+import Analytics from './components/admin/Analytics';
+import CommentSentimentFilter from './components/admin/CommentSentimentFilter';
+import ComplaintManager from './components/admin/CompaintManger';
+import PostManager from './components/admin/PostManager';
 
 const AppRoutes = () => {
   return (
@@ -21,7 +25,23 @@ const AppRoutes = () => {
         />
         <Route 
           path="/home" 
-          element={<RaiseComplaint/>} 
+          element={<Home/>} 
+        />
+        <Route 
+          path="/admin/analytics" 
+          element={<Analytics/>} 
+        />
+        <Route 
+          path="/admin/commentsentimentfilter" 
+          element={<CommentSentimentFilter/>} 
+        />
+        <Route 
+          path="/admin/complainmanager" 
+          element={<ComplaintManager/>} 
+        />
+        <Route 
+          path="/admin/postmanager" 
+          element={<PostManager/>} 
         />
       </Routes> 
     </>
