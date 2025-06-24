@@ -77,9 +77,9 @@ const PostManager = () => {
   return (
     <div className="p-4 max-w-4xl mx-auto">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Post Management</h1>
+        <h1 className="text-3xl font-bold">Post Management</h1>
         <button
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md shadow-sm"
           onClick={handleCreatePost}
         >
           + Create Post
@@ -87,26 +87,27 @@ const PostManager = () => {
       </div>
 
       {posts.map((post) => (
-        <div key={post.id} className="bg-white shadow-md rounded mb-6 overflow-hidden">
-          <img src={post.image} alt={post.title} className="w-full h-48 object-cover" />
+        <div key={post.id} className="bg-white shadow-md rounded-lg mb-6 overflow-hidden">
+          <img src={post.image} alt={post.title} className="w-full h-72 object-cover" />
+
           <div className="p-4">
             <div className="flex justify-between items-start mb-2">
               <h2 className="text-xl font-semibold">{post.title}</h2>
               <button
-                className="text-blue-600 hover:underline"
+                className="text-blue-500 hover:underline text-sm"
                 onClick={() => handleEditPost(post)}
               >
                 Edit
               </button>
             </div>
 
-            <p className="text-gray-700 mb-3">{post.description}</p>
+            <p className="text-gray-700 mb-4">{post.description}</p>
 
-            <div className="flex gap-3 mb-3 text-sm">
-              <span className="px-2 py-1 border border-blue-600 text-blue-600 rounded">
+            <div className="flex items-center gap-4 mb-4 text-sm">
+              <span className="flex items-center gap-2 px-3 py-1 rounded-md bg-blue-500 text-white">
                 {post.likes} Likes
               </span>
-              <span className="px-2 py-1 border border-purple-600 text-purple-600 rounded">
+              <span className="px-3 py-1 border border-gray-300 rounded-full text-sm">
                 {post.comments?.length || 0} Comments
               </span>
             </div>
@@ -117,7 +118,7 @@ const PostManager = () => {
                 {post.comments.slice(0, 3).map((comment) => (
                   <div key={comment.id} className="bg-gray-100 rounded p-2 mb-2">
                     <p className="text-sm">
-                      <strong>{comment.userName}:</strong> {comment.text}
+                      <strong className="text-blue-600">{comment.userName}:</strong> {comment.text}
                     </p>
                   </div>
                 ))}
@@ -130,8 +131,8 @@ const PostManager = () => {
       {/* Dialog */}
       {openDialog && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded shadow-lg max-w-xl w-full p-6 relative">
-            <h2 className="text-xl font-bold mb-4">
+          <div className="bg-white rounded-lg shadow-lg max-w-xl w-full p-6 relative">
+            <h2 className="text-2xl font-bold mb-4">
               {editingPost ? 'Edit Post' : 'Create New Post'}
             </h2>
 
@@ -141,7 +142,7 @@ const PostManager = () => {
               placeholder="Title"
               value={formData.title}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded p-2 mb-4"
+              className="w-full border border-gray-300 rounded-md px-3 py-2 mb-4"
               required
             />
 
@@ -151,12 +152,12 @@ const PostManager = () => {
               value={formData.description}
               onChange={handleChange}
               rows={4}
-              className="w-full border border-gray-300 rounded p-2 mb-4"
+              className="w-full border border-gray-300 rounded-md px-3 py-2 mb-4"
               required
             />
 
             <label className="block w-full cursor-pointer mb-4">
-              <span className="block text-center border border-gray-300 rounded p-2 bg-gray-50 hover:bg-gray-100">
+              <span className="block text-center border border-gray-300 rounded-md px-3 py-2 bg-gray-50 hover:bg-gray-100">
                 Upload Image
               </span>
               <input
@@ -171,21 +172,21 @@ const PostManager = () => {
               <img
                 src={formData.image}
                 alt="Preview"
-                className="w-full h-48 object-cover rounded mb-4"
+                className="w-full h-48 object-cover rounded-md mb-4"
               />
             )}
 
             <div className="flex justify-end gap-3">
               <button
                 onClick={() => setOpenDialog(false)}
-                className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-100"
+                className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSubmit}
                 disabled={!formData.title || !formData.description}
-                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50"
               >
                 {editingPost ? 'Update' : 'Create'}
               </button>
