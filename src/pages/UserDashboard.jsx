@@ -1,54 +1,58 @@
 import React, { useState } from 'react';
+import ViewPosts from '../components/user/ViewPosts';
+import RaiseComplaint from '../components/user/RaiseComplaint';
+import MyComplaints from '../components/user/MyComplaints';
+
+const TABS = [
+  { label: 'View Posts', icon: '📝' },
+  { label: 'Raise Complaint', icon: '🚨' },
+  { label: 'My Complaints', icon: '📋' },
+];
 
 const UserDashboard = () => {
   const [tabValue, setTabValue] = useState(0);
 
-  const handleTabChange = (index) => {
-    setTabValue(index);
-  };
-
-  const TabPanel = ({ children, value, index }) => (
-    <div className={`${value !== index ? 'hidden' : ''} py-6`}>
-      {value === index && children}
+  const TabPanel = ({ children, index }) => (
+    <div hidden={tabValue !== index} className="py-4">
+      {tabValue === index && <div>{children}</div>}
     </div>
   );
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">Customer Dashboard</h1>
+    <div className="max-w-6xl mx-auto px-4 py-6">
+      <h1 className="text-4xl font-bold mb-6 text-gray-800">
+        Customer Dashboard
+      </h1>
 
-      {/* Tabs */}
-      <div className="flex space-x-4 border-b border-gray-200 mb-4">
-        <button
-          className={`py-2 px-4 font-medium border-b-2 ${
-            tabValue === 0
-              ? 'border-blue-600 text-blue-600'
-              : 'border-transparent text-gray-600 hover:text-blue-600'
-          }`}
-          onClick={() => handleTabChange(0)}
-        >
-          Posts
-        </button>
-        <button
-          className={`py-2 px-4 font-medium border-b-2 ${
-            tabValue === 1
-              ? 'border-blue-600 text-blue-600'
-              : 'border-transparent text-gray-600 hover:text-blue-600'
-          }`}
-          onClick={() => handleTabChange(1)}
-        >
-          Profile
-        </button>
-        {/* Add more tabs as needed */}
+      <div className="border-b border-gray-300 mb-4">
+        <div className="flex space-x-4">
+          {TABS.map((tab, index) => (
+            <button
+              key={index}
+              onClick={() => setTabValue(index)}
+              className={`flex items-center gap-2 px-4 py-2 font-medium rounded-t-md transition ${
+                tabValue === index
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              <span className="text-lg">{tab.icon}</span>
+              {tab.label}
+            </button>
+          ))}
+        </div>
       </div>
 
-      {/* Tab Panels */}
-      <TabPanel value={tabValue} index={0}>
-        <p>This is the Posts tab content.</p>
+      <TabPanel index={0}>
+        <ViewPosts />
       </TabPanel>
 
-      <TabPanel value={tabValue} index={1}>
-        <p>This is the Profile tab content.</p>
+      <TabPanel index={1}>
+        <RaiseComplaint />
+      </TabPanel>
+
+      <TabPanel index={2}>
+        <MyComplaints />
       </TabPanel>
     </div>
   );
