@@ -27,21 +27,21 @@ const Analytics = () => {
       const response = await mockAPI.getComplaints();
       const complaints = response.data;
 
+      // Severity breakdown
       const severityCount = complaints.reduce((acc, complaint) => {
         acc[complaint.severity] = (acc[complaint.severity] || 0) + 1;
         return acc;
       }, {});
-
       const severityData = Object.entries(severityCount).map(([severity, count]) => ({
         name: severity,
         value: count
       }));
 
+      // Product type breakdown
       const productCount = complaints.reduce((acc, complaint) => {
         acc[complaint.productType] = (acc[complaint.productType] || 0) + 1;
         return acc;
       }, {});
-
       const productTypeData = Object.entries(productCount).map(([product, count]) => ({
         name: product,
         complaints: count
@@ -60,9 +60,10 @@ const Analytics = () => {
     <div className="p-6">
       <h2 className="text-3xl font-bold mb-6">Analytics Dashboard</h2>
 
+      {/* Charts */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Pie Chart */}
-        <div className="bg-white p-4 rounded shadow">
+        <div className="bg-white rounded shadow p-4">
           <h3 className="text-xl font-semibold mb-4">Complaints by Severity</h3>
           <div className="h-72">
             <ResponsiveContainer width="100%" height="100%">
@@ -88,7 +89,7 @@ const Analytics = () => {
         </div>
 
         {/* Bar Chart */}
-        <div className="bg-white p-4 rounded shadow">
+        <div className="bg-white rounded shadow p-4">
           <h3 className="text-xl font-semibold mb-4">Complaints by Product Type</h3>
           <div className="h-72">
             <ResponsiveContainer width="100%" height="100%">
@@ -107,27 +108,34 @@ const Analytics = () => {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+        {/* Total Complaints */}
         <div className="bg-blue-100 text-blue-900 p-4 rounded text-center">
           <p className="text-3xl font-bold">
             {complaintData.reduce((sum, item) => sum + item.value, 0)}
           </p>
-          <p className="text-sm">Total Complaints</p>
+          <p className="text-sm mt-1">Total Complaints</p>
         </div>
+
+        {/* Urgent Complaints */}
         <div className="bg-red-100 text-red-900 p-4 rounded text-center">
           <p className="text-3xl font-bold">
             {complaintData.find(item => item.name === 'Urgent')?.value || 0}
           </p>
-          <p className="text-sm">Urgent Complaints</p>
+          <p className="text-sm mt-1">Urgent Complaints</p>
         </div>
+
+        {/* High Priority */}
         <div className="bg-yellow-100 text-yellow-900 p-4 rounded text-center">
           <p className="text-3xl font-bold">
             {complaintData.find(item => item.name === 'High')?.value || 0}
           </p>
-          <p className="text-sm">High Priority</p>
+          <p className="text-sm mt-1">High Priority</p>
         </div>
+
+        {/* Resolution Rate */}
         <div className="bg-green-100 text-green-900 p-4 rounded text-center">
           <p className="text-3xl font-bold">85%</p>
-          <p className="text-sm">Resolution Rate</p>
+          <p className="text-sm mt-1">Resolution Rate</p>
         </div>
       </div>
     </div>
