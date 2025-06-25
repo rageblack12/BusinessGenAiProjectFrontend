@@ -29,26 +29,26 @@ const Navbar = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-blue-600 text-white shadow-md">
+    <header className="sticky top-0 z-50 bg-white/30 backdrop-blur-sm text-black shadow-md">
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
         {/* Logo */}
-        <Link to="/" className="text-xl font-bold hover:text-gray-200">
+        <Link to="/" className="text-xl font-bold hover:text-gray-800">
           Smart Feedback Portal
         </Link>
 
         {/* Desktop Menu */}
         <nav className="hidden md:flex items-center gap-6">
-          <Link to="/" className="hover:text-gray-200 flex items-center gap-1">
+          {/* <Link to="/" className="hover:text-gray-200 flex items-center gap-1">
             <FaHome /> Home
           </Link>
           <Link to="/posts" className="hover:text-gray-200 flex items-center gap-1">
             <FaClipboardList /> Posts
-          </Link>
+          </Link> */}
 
           {user && (
             <div className="flex items-center gap-4 relative">
               {/* Notifications */}
-              <button className="relative hover:text-gray-200">
+              <button className="relative hover:cursor-pointer">
                 <FaBell className="text-xl" />
                 {notificationCount > 0 && (
                   <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-1">
