@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { mockAPI } from '../../api/api';
+import api from '../../api/api';
+import axios from 'axios';
+import { baseURL } from '../../utils/util.js';
 
 const MyComplaints = () => {
   const [complaints, setComplaints] = useState([]);
@@ -11,8 +13,16 @@ const MyComplaints = () => {
 
   const loadComplaints = async () => {
     try {
-      const response = await mockAPI.getComplaints();
+      const token = localStorage.getItem('token'); // or however you store auth info
+      console.log(token);
+      const response = await axios.get(`${baseURL}/complaints/raise`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log('Complaints response:', response.data); 
       setComplaints(response.data);
+
     } catch (error) {
       console.error('Error loading complaints:', error);
     }
