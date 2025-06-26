@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { mockAPI } from '../../api/api';
+// import { mockAPI } from '../../api/api';
+import api from '../../api/api';
 import { productTypes } from '../../utils/mockData';
 import { FaPaperPlane } from 'react-icons/fa';
 
@@ -24,10 +25,10 @@ const RaiseComplaint = () => {
     setLoading(true);
 
     try {
-      const response = await mockAPI.createComplaint(formData);
+      const response = await api.post('/complaints/raise', formData);
       console.log('Complaint created:', response.data);
 
-      ({
+      setFormData({
         orderId: '',
         productType: '',
         description: ''
@@ -35,7 +36,7 @@ const RaiseComplaint = () => {
 
       setShowSuccess(true);
     } catch (error) {
-      console.error('Error creating complaint:', error);
+      console.error('Error creating complaint:', error.response?.data || error.message);
     }
 
     setLoading(false);
