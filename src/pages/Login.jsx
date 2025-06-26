@@ -28,6 +28,7 @@ const Login = () => {
     const result = await login(formData.email, formData.password);
 
     if (result.success) {
+      console.log(result);
       navigate(result.user.role === 'admin' ? '/admin' : '/dashboard');
     } else {
       setError(result.error);

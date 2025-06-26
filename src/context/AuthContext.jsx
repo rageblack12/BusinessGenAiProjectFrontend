@@ -28,10 +28,16 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       const res = await api.post('/users/login', { email, password });
-      const { user, token } = res.data;
+      const { user, accessToken } = res.data;
+      console.log(res.data);
+      console.log(accessToken);
+
+      if (!user || !accessToken) {
+        return { success: false, error: 'Invalid response from server' };
+      }
 
       localStorage.setItem('user', JSON.stringify(user));
-      localStorage.setItem('token', token);
+      localStorage.setItem('token', accessToken);
       setUser(user);
 
       return { success: true, user };

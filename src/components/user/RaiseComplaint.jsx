@@ -27,7 +27,7 @@ const RaiseComplaint = () => {
       const response = await mockAPI.createComplaint(formData);
       console.log('Complaint created:', response.data);
 
-({
+      ({
         orderId: '',
         productType: '',
         description: ''
