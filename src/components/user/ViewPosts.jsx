@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { API } from '../../api/api';
 import { FaHeart, FaRegHeart, FaPaperPlane } from 'react-icons/fa';
-import { addComment, getPosts, likePost } from '../../api/postAPI';
+import { addComment, addReply, getPosts, likePost } from '../../api/postAPI';
 
 
 const ViewPosts = () => {
@@ -61,7 +60,7 @@ const handleReplySubmit = async (commentId) => {
   const content = replyInputs[commentId];
   if (!content.trim()) return;
   try {
-    const response = await API.addReply(commentId, content);
+    const response = await addReply(commentId, content);
 
     // Update the post state with the new reply added under the correct comment
     setPosts(prevPosts => prevPosts.map(post => ({
@@ -74,6 +73,8 @@ const handleReplySubmit = async (commentId) => {
     })));
 
     setReplyInputs(prev => ({ ...prev, [commentId]: '' }));
+
+    await loadPosts();
   } catch (error) {
     console.error('Error submitting reply:', error);
   }

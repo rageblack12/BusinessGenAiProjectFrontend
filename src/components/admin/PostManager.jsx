@@ -20,7 +20,8 @@ const PostManager = () => {
   const loadPosts = async () => {
     try {
       const response = await API.getPosts();
-      setPosts(response.data);
+      const fetchedPosts = response.data.posts;
+      setPosts(fetchedPosts);
     } catch (error) {
       console.error('Error loading posts:', error);
     }
@@ -37,11 +38,26 @@ const PostManager = () => {
     setFormData({
       title: post.title,
       description: post.description,
-      image: post.image
+      image: post.image?.url || ''
     });
     setOpenDialog(true);
   };
-  
+
+  const handleDeletePost = async (postId) => {
+    if (!window.confirm('Are you sure you want to delete this post?')) return;
+    try {
+      const token = localStorage.getItem('token');
+      await axios.delete(`${baseURL}/posts/${postId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      setPosts(posts.filter(p => p._id !== postId));
+    } catch (error) {
+      console.error('Error deleting post:', error);
+    }
+  };
+
   const handleSubmit = async () => {
     try {
       const token = localStorage.getItem('token');
@@ -52,21 +68,33 @@ const PostManager = () => {
         form.append('image', formData.image);
       }
 
-      const response = await axios.post(`${baseURL}/posts/create`, form, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      let response;
 
-      setPosts([response.data.post, ...posts]);
+      if (editingPost) {
+        response = await axios.put(`${baseURL}/posts/${editingPost._id}`, form, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+
+        setPosts(posts.map(post => post._id === editingPost._id ? response.data.post : post));
+      } else {
+        response = await axios.post(`${baseURL}/posts/create`, form, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        setPosts([response.data.post, ...posts]);
+      }
+
       setOpenDialog(false);
       setFormData({ title: '', description: '', image: '' });
     } catch (error) {
       console.error('Error saving post:', error);
     }
   };
-
 
   const handleChange = (e) => {
     setFormData({
@@ -78,8 +106,7 @@ const PostManager = () => {
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const ImageUrl = `https://via.placeholder.com/600x300/4CAF50/white?text=${encodeURIComponent(file.name)}`;
-      setFormData({ ...formData, image: ImageUrl });
+      setFormData({ ...formData, image: file });
     }
   };
 
@@ -97,16 +124,26 @@ const PostManager = () => {
 
       {posts.map((post) => (
         <div key={post._id} className="bg-white shadow-md rounded-lg mb-6 overflow-hidden">
-          <img src={post.image?.url} alt={post.title} className="w-full h-72 object-cover" />
+          {post.image?.url && (
+            <img src={post.image.url} alt={post.title} className="w-full h-72 object-cover" />
+          )}
           <div className="p-4">
             <div className="flex justify-between items-start mb-2">
               <h2 className="text-xl font-semibold">{post.title}</h2>
-              <button
-                className="text-blue-500 hover:underline text-sm"
-                onClick={() => handleEditPost(post)}
-              >
-                Edit
-              </button>
+              <div className="flex gap-3">
+                <button
+                  className="text-blue-500 hover:underline text-sm"
+                  onClick={() => handleEditPost(post)}
+                >
+                  Edit
+                </button>
+                <button
+                  className="text-red-500 hover:underline text-sm"
+                  onClick={() => handleDeletePost(post._id)}
+                >
+                  Delete
+                </button>
+              </div>
             </div>
 
             <p className="text-gray-700 mb-4">{post.description}</p>
@@ -124,9 +161,13 @@ const PostManager = () => {
               <div className="border-t pt-3">
                 <h3 className="font-medium mb-2">Recent Comments:</h3>
                 {post.comments.slice(0, 3).map((comment) => (
-                  <div key={comment.id} className="bg-gray-100 rounded p-2 mb-2">
+                  <div key={comment._id} className="bg-gray-100 rounded p-2 mb-2">
                     <p className="text-sm">
-                      <strong className="text-blue-600">{comment.userName}:</strong> {comment.text}
+                      <strong className="text-blue-600">{comment.user?.name || 'User'}:</strong>
+                      {' '}{comment.content || 'No content'}
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      {comment.createdAt ? new Date(comment.createdAt).toLocaleString() : 'Unknown Date'}
                     </p>
                   </div>
                 ))}
@@ -136,7 +177,6 @@ const PostManager = () => {
         </div>
       ))}
 
-      {/* Dialog */}
       {openDialog && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-lg max-w-xl w-full p-6 relative">
@@ -178,7 +218,7 @@ const PostManager = () => {
 
             {formData.image && (
               <img
-                src={formData.image}
+                src={formData.image instanceof File ? URL.createObjectURL(formData.image) : formData.image}
                 alt="Preview"
                 className="w-full h-48 object-cover rounded-md mb-4"
               />
