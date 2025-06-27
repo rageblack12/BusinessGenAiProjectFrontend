@@ -15,7 +15,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [notificationCount] = useState(3); // Mock notification count
+  const [notificationCount] = useState(3); //  notification count
 
   const handleLogout = () => {
     logout();

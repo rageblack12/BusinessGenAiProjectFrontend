@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { mockAPI } from '../../api/api';
+import { API } from '../../api/api';
 import { baseURL } from '../../utils/util';
 import axios from 'axios';
 
@@ -19,7 +19,7 @@ const PostManager = () => {
 
   const loadPosts = async () => {
     try {
-      const response = await mockAPI.getPosts();
+      const response = await API.getPosts();
       setPosts(response.data);
     } catch (error) {
       console.error('Error loading posts:', error);
@@ -78,8 +78,8 @@ const PostManager = () => {
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const mockImageUrl = `https://via.placeholder.com/600x300/4CAF50/white?text=${encodeURIComponent(file.name)}`;
-      setFormData({ ...formData, image: mockImageUrl });
+      const ImageUrl = `https://via.placeholder.com/600x300/4CAF50/white?text=${encodeURIComponent(file.name)}`;
+      setFormData({ ...formData, image: ImageUrl });
     }
   };
 

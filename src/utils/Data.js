@@ -1,5 +1,5 @@
 
-export const mockPosts = [
+export const Posts = [
   {
     id: 1,
     title: 'New Product Launch!',
@@ -28,7 +28,7 @@ export const mockPosts = [
   }
 ];
 
-export const mockComplaints = [
+export const Complaints = [
   {
     id: 1,
     userId: 2,

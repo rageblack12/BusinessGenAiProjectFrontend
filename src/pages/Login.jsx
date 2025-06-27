@@ -42,11 +42,11 @@ const Login = () => {
       <div className="bg-white shadow-xl rounded-lg w-full max-w-md p-6">
         <h2 className="text-3xl font-bold text-center mb-4 text-gray-800">Login</h2>
 
-        <div className="bg-blue-100 text-blue-800 text-sm rounded p-3 mb-4">
+        {/* <div className="bg-blue-100 text-blue-800 text-sm rounded p-3 mb-4">
           <p><strong>Demo Credentials:</strong></p>
           <p>Admin: <code>admin@test.com</code> / password</p>
           <p>User: <code>user@test.com</code> / password</p>
-        </div>
+        </div> */}
 
         {error && (
           <div className="bg-red-100 text-red-700 text-sm rounded p-3 mb-4 border border-red-300">

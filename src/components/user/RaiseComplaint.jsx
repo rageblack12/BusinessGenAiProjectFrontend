@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-// import { mockAPI } from '../../api/api';
-import api from '../../api/api';
-import { productTypes } from '../../utils/mockData';
+import { raiseComplaint } from '../../api/complaintAPI';
+import { productTypes } from '../../utils/Data';
 import { FaPaperPlane } from 'react-icons/fa';
 
 const RaiseComplaint = () => {
@@ -25,7 +24,7 @@ const RaiseComplaint = () => {
     setLoading(true);
 
     try {
-      const response = await api.post('/complaints/raise', formData);
+      const response = await raiseComplaint(formData);
       console.log('Complaint created:', response.data);
 
       setFormData({

@@ -18,8 +18,8 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Mock API responses for development
-export const mockAPI = {
+//  API responses for development
+export const API = {
   // Posts API
   getPosts: () => Promise.resolve({
     data: [

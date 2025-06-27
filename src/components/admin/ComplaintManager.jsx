@@ -1,8 +1,8 @@
-import { mockAPI } from '../../api/api';
+import { API } from '../../api/api';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { baseURL } from '../../utils/util.js';
-import { productTypes } from '../../utils/mockData';
+import { productTypes } from '../../utils/Data';
 
 const ComplaintManager = () => {
   const [complaints, setComplaints] = useState([]);
@@ -55,7 +55,7 @@ const ComplaintManager = () => {
 
   const handleSuggestReply = async (id, description) => {
     try {
-      const response = await mockAPI.getSuggestedReply(description);
+      const response = await API.getSuggestedReply(description);
       setReplyTexts({ ...replyTexts, [id]: response.data.reply });
     } catch (err) {
       console.error('Error suggesting reply:', err);

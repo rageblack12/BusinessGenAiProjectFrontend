@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import api from '../../api/api';
+import {getComplaints} from '../../api/complaintAPI'; 
 import axios from 'axios';
 import { baseURL } from '../../utils/util.js';
 
@@ -13,13 +13,9 @@ const MyComplaints = () => {
 
   const loadComplaints = async () => {
     try {
-      const token = localStorage.getItem('token'); // or however you store auth info
-      console.log(token);
-      const response = await axios.get(`${baseURL}/complaints/raise`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      
+      const response = await getComplaints(); // Fetch complaints from the API
+        
       console.log('Complaints response:', response.data); 
       setComplaints(response.data);
 

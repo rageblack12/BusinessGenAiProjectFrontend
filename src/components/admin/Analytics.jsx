@@ -12,7 +12,7 @@ import {
   Legend,
   ResponsiveContainer
 } from 'recharts';
-import { mockAPI } from '../../api/api';
+import { API } from '../../api/api';
 
 const Analytics = () => {
   const [complaintData, setComplaintData] = useState([]);
@@ -24,7 +24,7 @@ const Analytics = () => {
 
   const loadAnalyticsData = async () => {
     try {
-      const response = await mockAPI.getComplaints();
+      const response = await API.getComplaints();
       const complaints = response.data;
 
       // Severity breakdown

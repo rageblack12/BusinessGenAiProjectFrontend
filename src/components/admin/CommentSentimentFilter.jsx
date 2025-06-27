@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { mockAPI } from '../../api/api';
+import { API } from '../../api/api';
 
 const CommentSentimentFilter = () => {
   const [posts, setPosts] = useState([]);
@@ -13,7 +13,7 @@ const CommentSentimentFilter = () => {
 
   const loadPostsWithComments = async () => {
     try {
-      const response = await mockAPI.getPosts();
+      const response = await API.getPosts();
       const postsWithComments = response.data.filter(post => post.comments?.length > 0);
       setPosts(postsWithComments);
 
@@ -24,7 +24,7 @@ const CommentSentimentFilter = () => {
         for (const comment of post.comments) {
           replies[comment.id] = '';
           try {
-            const sentimentResponse = await mockAPI.getSentiment(comment.text);
+            const sentimentResponse = await API.getSentiment(comment.text);
             sentiments[comment.id] = sentimentResponse.data.sentiment;
           } catch (error) {
             sentiments[comment.id] = 'Neutral';
@@ -70,7 +70,7 @@ const CommentSentimentFilter = () => {
 
   const handleSuggestReply = async (commentId, commentText) => {
     try {
-      const response = await mockAPI.getSuggestedReply(commentText);
+      const response = await API.getSuggestedReply(commentText);
       setReplyTexts(prev => ({ ...prev, [commentId]: response.data.reply }));
     } catch (error) {
       console.error('Error getting suggested reply:', error);
