@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { mockAPI } from '../../api/api';
+import { baseURL } from '../../utils/util';
+import axios from 'axios';
 
 const PostManager = () => {
   const [posts, setPosts] = useState([]);
@@ -39,25 +41,32 @@ const PostManager = () => {
     });
     setOpenDialog(true);
   };
-
+  
   const handleSubmit = async () => {
     try {
-      if (editingPost) {
-        setPosts(posts.map(post =>
-          post.id === editingPost.id
-            ? { ...post, ...formData }
-            : post
-        ));
-      } else {
-        const response = await mockAPI.createPost(formData);
-        setPosts([response.data, ...posts]);
+      const token = localStorage.getItem('token');
+      const form = new FormData();
+      form.append('title', formData.title);
+      form.append('description', formData.description);
+      if (formData.image instanceof File) {
+        form.append('image', formData.image);
       }
+
+      const response = await axios.post(`${baseURL}/posts/create`, form, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      setPosts([response.data.post, ...posts]);
       setOpenDialog(false);
       setFormData({ title: '', description: '', image: '' });
     } catch (error) {
       console.error('Error saving post:', error);
     }
   };
+
 
   const handleChange = (e) => {
     setFormData({
@@ -87,9 +96,8 @@ const PostManager = () => {
       </div>
 
       {posts.map((post) => (
-        <div key={post.id} className="bg-white shadow-md rounded-lg mb-6 overflow-hidden">
-          <img src={post.image} alt={post.title} className="w-full h-72 object-cover" />
-
+        <div key={post._id} className="bg-white shadow-md rounded-lg mb-6 overflow-hidden">
+          <img src={post.image?.url} alt={post.title} className="w-full h-72 object-cover" />
           <div className="p-4">
             <div className="flex justify-between items-start mb-2">
               <h2 className="text-xl font-semibold">{post.title}</h2>

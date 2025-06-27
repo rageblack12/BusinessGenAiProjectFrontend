@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
 import { mockAPI } from '../../api/api';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { baseURL } from '../../utils/util.js';
 import { productTypes } from '../../utils/mockData';
 
 const ComplaintManager = () => {
@@ -18,11 +20,19 @@ const ComplaintManager = () => {
 
   const loadComplaints = async () => {
     try {
-      const response = await mockAPI.getComplaints();
-      setComplaints(response.data);
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`${baseURL}/complaints/admin/allcomplaints`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const complaintsData = response.data.complaints || [];
+      setComplaints(complaintsData);
+
       const replies = {};
-      response.data.forEach((c) => {
-        replies[c.id] = '';
+      complaintsData.forEach((c) => {
+        replies[c._id] = '';
       });
       setReplyTexts(replies);
     } catch (err) {
@@ -41,13 +51,7 @@ const ComplaintManager = () => {
     setFilteredComplaints(filtered);
   };
 
-  const handleFilterChange = (type, value) => {
-    setFilters({ ...filters, [type]: value });
-  };
 
-  const handleReplyChange = (id, value) => {
-    setReplyTexts({ ...replyTexts, [id]: value });
-  };
 
   const handleSuggestReply = async (id, description) => {
     try {
@@ -58,14 +62,28 @@ const ComplaintManager = () => {
     }
   };
 
+  const handleFilterChange = (type, value) => {
+    setFilters({ ...filters, [type]: value });
+  };
+
+  const handleReplyChange = (id, value) => {
+    setReplyTexts({ ...replyTexts, [id]: value });
+  };
+
   const handleSendReply = async (id) => {
     const reply = replyTexts[id];
     if (!reply.trim()) return;
 
     try {
-      await mockAPI.replyToComplaint(id, reply);
+      const token = localStorage.getItem('token');
+      await axios.post(`http://localhost:3000/api/complaints/reply/${id}`, { reply }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
       setComplaints(complaints.map(c =>
-        c.id === id ? { ...c, adminReply: reply, status: 'Resolved' } : c
+        c._id === id ? { ...c, adminReply: reply, status: 'Resolved' } : c
       ));
       setReplyTexts({ ...replyTexts, [id]: '' });
     } catch (err) {
@@ -126,11 +144,13 @@ const ComplaintManager = () => {
         </div>
       ) : (
         filteredComplaints.map((complaint) => (
-          <div key={complaint.id} className="bg-white shadow rounded p-4 mb-6">
+          <div key={complaint._id} className="bg-white shadow rounded p-4 mb-6">
             <div className="flex justify-between items-start mb-3">
               <div>
                 <h2 className="text-lg font-semibold">Order #{complaint.orderId}</h2>
-                <p className="text-sm text-gray-600">Customer: {complaint.userName}</p>
+                <p className="text-sm text-gray-600">
+                  Customer: {complaint.userId?.name || 'Unknown'}
+                </p>
               </div>
               <span className={`text-xs font-medium px-2 py-1 rounded ${getSeverityColor(complaint.severity)}`}>
                 {complaint.severity}
@@ -157,7 +177,7 @@ const ComplaintManager = () => {
                 <hr className="my-4" />
                 <div className="mb-3">
                   <button
-                    onClick={() => handleSuggestReply(complaint.id, complaint.description)}
+                    onClick={() => handleSuggestReply(complaint._id, complaint.description)}
                     className="text-sm border border-blue-600 text-blue-600 px-3 py-1 rounded hover:bg-blue-50"
                   >
                     💡 Suggest Reply
@@ -168,12 +188,12 @@ const ComplaintManager = () => {
                     rows={3}
                     className="w-full border rounded p-2 text-sm"
                     placeholder="Write your reply..."
-                    value={replyTexts[complaint.id] || ''}
-                    onChange={(e) => handleReplyChange(complaint.id, e.target.value)}
+                    value={replyTexts[complaint._id] || ''}
+                    onChange={(e) => handleReplyChange(complaint._id, e.target.value)}
                   />
                   <button
-                    onClick={() => handleSendReply(complaint.id)}
-                    disabled={!replyTexts[complaint.id]?.trim()}
+                    onClick={() => handleSendReply(complaint._id)}
+                    disabled={!replyTexts[complaint._id]?.trim()}
                     className="bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-50"
                   >
                     📩 Send
@@ -181,6 +201,7 @@ const ComplaintManager = () => {
                 </div>
               </>
             )}
+
           </div>
         ))
       )}
