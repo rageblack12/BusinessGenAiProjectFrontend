@@ -33,10 +33,7 @@ const ComplaintManager = () => {
     let filtered = complaints;
     if (filters.productType) filtered = filtered.filter((c) => c.productType === filters.productType);
     if (filters.severity) filtered = filtered.filter((c) => c.severity === filters.severity);
-    if (filters.status) {
-      if (filters.status === 'Open') filtered = filtered.filter((c) => !c.adminReply);
-      else if (filters.status === 'Resolved') filtered = filtered.filter((c) => c.adminReply);
-    }
+    if (filters.status) filtered = filtered.filter((c) => c.status.toLowerCase() === filters.status.toLowerCase());
     setFilteredComplaints(filtered);
   };
 
@@ -57,8 +54,7 @@ const ComplaintManager = () => {
     if (!reply.trim()) return;
     try {
       await sendComplaintReply(id, reply);
-      setComplaints(complaints.map((c) => c._id === id ? { ...c, adminReply: reply, status: 'Resolved' } : c));
-      setReplyTexts({ ...replyTexts, [id]: '' });
+      await loadComplaints();
     } catch (err) {
       console.error('Error sending reply:', err);
     }
@@ -106,8 +102,8 @@ const ComplaintManager = () => {
             <label className="text-sm font-medium mb-1">Status</label>
             <select className="border rounded px-3 py-2" value={filters.status} onChange={(e) => handleFilterChange('status', e.target.value)}>
               <option value="">All</option>
-              <option value="Open">Open</option>
-              <option value="Resolved">Resolved</option>
+              <option value="open">Open</option>
+              <option value="resolved">Resolved</option>
             </select>
           </div>
         </div>
@@ -126,9 +122,14 @@ const ComplaintManager = () => {
                   Order #{complaint.orderId} - {complaint.userId?.name || 'Unknown'}
                 </h2>
               </div>
-              <span className={`text-xs font-medium px-2 py-1 rounded ${getSeverityColor(complaint.severity)}`}>
-                {complaint.severity}
-              </span>
+              <div className="flex flex-col items-end gap-1 text-right">
+                <span className={`text-xs font-medium px-2 py-1 rounded ${getSeverityColor(complaint.severity)}`}>
+                  Severity: {complaint.severity}
+                </span>
+                <span className={`text-xs font-medium px-2 py-1 rounded ${complaint.status === 'resolved' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
+                  Status: {complaint.status === 'resolved' ? 'Resolved' : 'Open'}
+                </span>
+              </div>
             </div>
 
             {expandedComplaint === complaint._id && (

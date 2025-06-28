@@ -68,3 +68,7 @@ export const addComment = (postId, content) =>
 export const addReply = async (commentId, content) => {
   return await api.post('/comment-replies/create', { commentId, content });
 };
+
+// Get AI reply
+export const getSuggestedReply = (sentiment, description) =>
+  api.post('/ai/suggestCommentReply', { sentiment, description });

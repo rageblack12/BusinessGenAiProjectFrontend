@@ -9,8 +9,8 @@ export const raiseComplaint = (data) => api.post('/complaints/raise', data);
 export const getAllComplaints = () => api.get('/complaints/all');
 
 // Get AI reply
-export const getSuggestedReply = (severeity, description) =>
-  api.post('/ai/suggestComplaintReply', { severeity, description });
+export const getSuggestedReply = (severity, description) =>
+  api.post('/ai/suggestComplaintReply', { severity, description });
 
 
 // Reply to a complaint

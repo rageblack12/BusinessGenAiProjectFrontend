@@ -12,7 +12,7 @@ import {
   Legend,
   ResponsiveContainer
 } from 'recharts';
-import { API } from '../../api/api';
+import { getAllComplaints } from '../../api/complaintAPI';
 
 const Analytics = () => {
   const [complaintData, setComplaintData] = useState([]);
@@ -24,8 +24,8 @@ const Analytics = () => {
 
   const loadAnalyticsData = async () => {
     try {
-      const response = await API.getComplaints();
-      const complaints = response.data;
+      const response = await getAllComplaints();
+      const complaints = response.data.complaints || [];
 
       // Severity breakdown
       const severityCount = complaints.reduce((acc, complaint) => {
