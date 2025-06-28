@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import {getComplaints} from '../../api/complaintAPI'; 
+import {getComplaintsByUser} from '../../api/complaintAPI'; 
 import axios from 'axios';
-import { baseURL } from '../../utils/util.js';
+
 
 const MyComplaints = () => {
   const [complaints, setComplaints] = useState([]);
@@ -14,7 +14,7 @@ const MyComplaints = () => {
   const loadComplaints = async () => {
     try {
       
-      const response = await getComplaints(); // Fetch complaints from the API
+      const response = await getComplaintsByUser(); // Fetch complaints from the API
         
       console.log('Complaints response:', response.data); 
       setComplaints(response.data);
