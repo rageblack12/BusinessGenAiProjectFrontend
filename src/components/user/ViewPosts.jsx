@@ -61,20 +61,20 @@ const handleReplySubmit = async (commentId) => {
   if (!content.trim()) return;
   try {
     const response = await addReply(commentId, content);
+    console.log('Reply added:', response.data);
 
     // Update the post state with the new reply added under the correct comment
     setPosts(prevPosts => prevPosts.map(post => ({
       ...post,
       comments: post.comments.map(comment =>
         comment._id === commentId
-          ? { ...comment, replies: [...(comment.replies || []), response.data] }
+          ? { ...comment, replies: [...(comment.replies || []), response.data.reply] }
           : comment
       )
     })));
 
     setReplyInputs(prev => ({ ...prev, [commentId]: '' }));
 
-    await loadPosts();
   } catch (error) {
     console.error('Error submitting reply:', error);
   }
@@ -111,7 +111,7 @@ const handleReplySubmit = async (commentId) => {
 
     try {
       const response = await addComment(postId, content);
-
+      console.log('Comment added:', response.data);
       setPosts(posts.map(post =>
         post.id === postId
           ? { ...post, comments: [...(post.comments || []), response.data] }
@@ -119,6 +119,7 @@ const handleReplySubmit = async (commentId) => {
       ));
 
       setComments({ ...comments, [postId]: '' });
+      await loadPosts(); // Refresh posts to ensure comments are updated
     } catch (error) {
       console.error('Error adding comment:', error);
     }

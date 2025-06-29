@@ -17,7 +17,7 @@ import { getAllComplaints } from '../../api/complaintAPI';
 const Analytics = () => {
   const [complaintData, setComplaintData] = useState([]);
   const [productData, setProductData] = useState([]);
-  const [resolutionRate, setResolutionRate] = useState(0); // Added
+  const [resolutionRate, setResolutionRate] = useState(0); 
 
   useEffect(() => {
     loadAnalyticsData();
@@ -57,7 +57,7 @@ const Analytics = () => {
 
       setComplaintData(severityData);
       setProductData(productTypeData);
-      setResolutionRate(calculatedRate); // Set resolution rate
+      setResolutionRate(calculatedRate); 
     } catch (error) {
       console.error('Error loading analytics data:', error);
     }

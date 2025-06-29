@@ -102,12 +102,12 @@ const PostManager = () => {
         ...post,
         comments: post.comments.map(comment =>
           comment._id === commentId
-            ? { ...comment, replies: [...(comment.replies || []), response.data] }
+            ? { ...comment, replies: [...(comment.replies || []), response.data.reply] }
             : comment
         )
       })));
       setReplyInputs(prev => ({ ...prev, [commentId]: '' }));
-      loadPosts();
+      
     } catch (error) {
       console.error('Error submitting reply:', error);
     }
