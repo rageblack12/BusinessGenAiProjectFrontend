@@ -51,7 +51,7 @@ const MyComplaints = () => {
       console.error('Error sending reply:', error);
     }
   };
-
+  
   const getStatusColor = (status) => {
     switch (status) {
       case 'Resolved': return 'bg-green-100 text-green-700 border-green-300';

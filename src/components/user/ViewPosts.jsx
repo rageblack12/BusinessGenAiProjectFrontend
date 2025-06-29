@@ -23,7 +23,7 @@ const ViewPosts = () => {
 
     const commentsObj = {};
     fetchedPosts.forEach(post => {
-      commentsObj[post._id] = ''; // Use _id, not id
+      commentsObj[post._id] = ''; 
     });
     setComments(commentsObj);
 
