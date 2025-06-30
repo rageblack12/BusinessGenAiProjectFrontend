@@ -17,14 +17,30 @@ const PostManager = () => {
     loadPosts();
   }, []);
 
+  // const loadPosts = async () => {
+  //   try {
+  //     const response = await mockAPI.getPosts();
+  //     setPosts(response.data);
+  //   } catch (error) {
+  //     console.error('Error loading posts:', error);
+  //   }
+  // };
+
+
   const loadPosts = async () => {
     try {
-      const response = await mockAPI.getPosts();
-      setPosts(response.data);
+      const token = localStorage.getItem('token'); // if your API requires auth
+      const response = await axios.get(`${baseURL}/posts/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setPosts(response.data.posts || []); // adjust based on your backend response structure
     } catch (error) {
       console.error('Error loading posts:', error);
     }
   };
+
 
   const handleCreatePost = () => {
     setEditingPost(null);
@@ -41,7 +57,7 @@ const PostManager = () => {
     });
     setOpenDialog(true);
   };
-  
+
   const handleSubmit = async () => {
     try {
       const token = localStorage.getItem('token');
@@ -78,9 +94,9 @@ const PostManager = () => {
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const mockImageUrl = `https://via.placeholder.com/600x300/4CAF50/white?text=${encodeURIComponent(file.name)}`;
-      setFormData({ ...formData, image: mockImageUrl });
+      setFormData({ ...formData, image: file });
     }
+
   };
 
   return (
@@ -138,8 +154,8 @@ const PostManager = () => {
 
       {/* Dialog */}
       {openDialog && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-lg max-w-xl w-full p-6 relative">
+        <div className="fixed inset-0 bg-gray-600 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-lg max-w-xl w-full p-10 relative">
             <h2 className="text-2xl font-bold mb-4">
               {editingPost ? 'Edit Post' : 'Create New Post'}
             </h2>
