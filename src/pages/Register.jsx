@@ -66,7 +66,7 @@ const Register = () => {
               required
               value={formData.name}
               onChange={handleChange}
-              className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="input-green-shadow w-full mt-1 px-4 py-2 rounded-md shadow-sm focus:shadow-md transition-shadow duration-300 focus:outline-none focus:ring-0 bg-gray-50"
             />
           </div>
 
@@ -80,7 +80,7 @@ const Register = () => {
               required
               value={formData.email}
               onChange={handleChange}
-              className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="input-green-shadow w-full mt-1 px-4 py-2 rounded-md shadow-sm focus:shadow-md transition-shadow duration-300 focus:outline-none focus:ring-0 bg-gray-50"
             />
           </div>
 
@@ -94,7 +94,7 @@ const Register = () => {
               required
               value={formData.password}
               onChange={handleChange}
-              className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="input-green-shadow w-full mt-1 px-4 py-2 rounded-md shadow-sm focus:shadow-md transition-shadow duration-300 focus:outline-none focus:ring-0 bg-gray-50"
             />
           </div>
 
@@ -108,20 +108,20 @@ const Register = () => {
               required
               value={formData.confirmPassword}
               onChange={handleChange}
-              className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="input-green-shadow w-full mt-1 px-4 py-2 rounded-md shadow-sm focus:shadow-md transition-shadow duration-300 focus:outline-none focus:ring-0 bg-gray-50"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-200 disabled:opacity-50"
+            className="cursor-pointer w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-700 transition duration-200 disabled:opacity-50"
           >
             {loading ? 'Registering...' : 'Register'}
           </button>
 
           <div className="text-center text-sm mt-3">
-            <RouterLink to="/login" className="text-blue-600 hover:underline">
+            <RouterLink to="/login" className="font-bold text-blue-600 hover:underline">
               Already have an account? Login
             </RouterLink>
           </div>

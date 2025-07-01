@@ -12,11 +12,12 @@ import {
   Legend,
   ResponsiveContainer
 } from 'recharts';
-import { mockAPI } from '../../api/api';
+import { getAllComplaints } from '../../api/complaintAPI';
 
 const Analytics = () => {
   const [complaintData, setComplaintData] = useState([]);
   const [productData, setProductData] = useState([]);
+  const [resolutionRate, setResolutionRate] = useState(0); 
 
   useEffect(() => {
     loadAnalyticsData();
@@ -24,8 +25,8 @@ const Analytics = () => {
 
   const loadAnalyticsData = async () => {
     try {
-      const response = await mockAPI.getComplaints();
-      const complaints = response.data;
+      const response = await getAllComplaints();
+      const complaints = response.data.complaints || [];
 
       // Severity breakdown
       const severityCount = complaints.reduce((acc, complaint) => {
@@ -47,8 +48,16 @@ const Analytics = () => {
         complaints: count
       }));
 
+      // Resolution rate calculation
+      const resolvedCount = complaints.filter(
+        (c) => c.status === 'resolved' || c.status === 'closed'
+      ).length;
+      const totalCount = complaints.length;
+      const calculatedRate = totalCount > 0 ? ((resolvedCount / totalCount) * 100).toFixed(1) : 0;
+
       setComplaintData(severityData);
       setProductData(productTypeData);
+      setResolutionRate(calculatedRate); 
     } catch (error) {
       console.error('Error loading analytics data:', error);
     }
@@ -134,7 +143,7 @@ const Analytics = () => {
 
         {/* Resolution Rate */}
         <div className="bg-green-100 text-green-900 p-4 rounded text-center">
-          <p className="text-3xl font-bold">85%</p>
+          <p className="text-3xl font-bold">{resolutionRate}%</p>
           <p className="text-sm mt-1">Resolution Rate</p>
         </div>
       </div>

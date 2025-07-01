@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PostManager from '../components/admin/PostManager';
 import ComplaintManager from '../components/admin/ComplaintManager';
-import CommentSentimentFilter from '../components/admin/CommentSentimentFilter';
+import CommentManager from '../components/admin/CommentManager';
 import Analytics from '../components/admin/Analytics';
 
 const AdminDashboard = () => {
@@ -51,7 +51,7 @@ const AdminDashboard = () => {
         </TabPanel>
 
         <TabPanel value={tabValue} index={2}>
-          <CommentSentimentFilter />
+          <CommentManager />
         </TabPanel>
 
         <TabPanel value={tabValue} index={3}>

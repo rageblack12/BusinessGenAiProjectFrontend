@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
-// import { mockAPI } from '../../api/api';
-import api from '../../api/api';
-import { productTypes } from '../../utils/mockData';
+import React, { useState, useEffect } from 'react';
+import { raiseComplaint } from '../../api/complaintAPI';
+import { productTypes } from '../../utils/Data';
 import { FaPaperPlane } from 'react-icons/fa';
 
 const RaiseComplaint = () => {
@@ -25,7 +24,7 @@ const RaiseComplaint = () => {
     setLoading(true);
 
     try {
-      const response = await api.post('/complaints/raise', formData);
+      const response = await raiseComplaint(formData);
       console.log('Complaint created:', response.data);
 
       setFormData({
@@ -42,12 +41,51 @@ const RaiseComplaint = () => {
     setLoading(false);
   };
 
-  return (
-    <div className="p-4 max-w-2xl mx-auto">
-      <h2 className="text-3xl font-bold mb-6">Raise a Complaint</h2>
 
-      <div className="bg-white shadow-md rounded-lg p-6">
-        <form onSubmit={handleSubmit} className="space-y-4">
+
+  useEffect(() => {
+    if (showSuccess) {
+      const timer = setTimeout(() => {
+        setShowSuccess(false);
+      }, 3000); // 3000ms = 3 seconds
+
+      return () => clearTimeout(timer); // Cleanup on unmount or re-trigger
+    }
+  }, [showSuccess]);
+
+
+  return (
+    <div className="p-4 max-w-6xl mx-auto">
+      <h2 className="text-2xl font-bold mb-6">Raise a Complaint</h2>
+
+      {/* Success Message */}
+      {showSuccess && (
+        <div className="mt-6 mb-3 bg-green-300 border border-green-500 text-green-800 px-4 py-3 rounded relative">
+          <span className="block sm:inline">
+            Complaint submitted successfully! Admin will review and respond soon.
+          </span>
+          <button
+            onClick={() => setShowSuccess(false)}
+            className="absolute top-2 right-2 text-green-700 hover:text-green-900"
+          >
+            ×
+          </button>
+        </div>
+      )}
+
+
+      <div className="bg-white shadow-lg rounded-xl p-6 flex flex-col md:flex-row items-center gap-8">
+        {/* Vector Image Section */}
+        <div className="w-full md:w-1/2">
+          <img
+            src="\src\assets\complaint.png" // Replace with your actual image path
+            alt="Complaint Illustration"
+            className="w-full h-auto object-contain"
+          />
+        </div>
+
+        {/* Form Section */}
+        <form onSubmit={handleSubmit} className="w-full md:w-1/2 space-y-6">
           <div>
             <label htmlFor="orderId" className="block text-sm font-medium text-gray-700">
               Order ID
@@ -60,7 +98,7 @@ const RaiseComplaint = () => {
               onChange={handleChange}
               required
               placeholder="e.g., ORD-12345"
-              className="mt-1 block w-full border border-gray-300 rounded-md p-2 text-sm"
+              className="mt-2 w-full rounded-lg bg-gray-50 p-3 shadow-sm focus:shadow-md focus:outline-none transition-all text-sm"
             />
           </div>
 
@@ -74,7 +112,7 @@ const RaiseComplaint = () => {
               value={formData.productType}
               onChange={handleChange}
               required
-              className="mt-1 block w-full border border-gray-300 rounded-md p-2 text-sm"
+              className="mt-2 w-full rounded-lg bg-gray-50 p-3 shadow-sm focus:shadow-md focus:outline-none transition-all text-sm"
             >
               <option value="">Select a product type</option>
               {productTypes.map((type) => (
@@ -97,35 +135,23 @@ const RaiseComplaint = () => {
               onChange={handleChange}
               required
               placeholder="Please describe your issue in detail..."
-              className="mt-1 block w-full border border-gray-300 rounded-md p-2 text-sm"
+              className="mt-2 w-full rounded-lg bg-gray-50 p-3 shadow-sm focus:shadow-md focus:outline-none transition-all text-sm"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 disabled:opacity-50"
+            className="cursor-pointer flex shadow-lg items-center gap-2 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition disabled:opacity-50"
           >
             <FaPaperPlane />
-            {loading ? 'Submitting...' : 'Submit Complaint'}
+            {loading ? 'Raising...' : 'Raise'}
           </button>
         </form>
       </div>
 
-      {showSuccess && (
-        <div className="mt-4 bg-green-100 border border-green-300 text-green-800 px-4 py-3 rounded relative">
-          <span className="block sm:inline">
-            Complaint submitted successfully! Admin will review and respond soon.
-          </span>
-          <button
-            onClick={() => setShowSuccess(false)}
-            className="absolute top-2 right-2 text-green-700 hover:text-green-900"
-          >
-            ×
-          </button>
-        </div>
-      )}
     </div>
+
   );
 };
 

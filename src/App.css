@@ -1,0 +1,14 @@
+/* Custome css for login desin */
+
+.input-green-shadow {
+    box-shadow: 0 0 3px rgba(34, 197, 94, 0.5);
+    transition: box-shadow 0.3s ease;
+}
+
+.input-green-shadow:focus {
+    box-shadow: 0 0 5px rgba(34, 197, 94, 0.7);
+}
+
+.postBox {
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+}

@@ -1,54 +1,56 @@
-# React + TypeScript + Vite
+# 🌐 Smart Feedback Portal - Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<p align="center">
+  <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React"/>
+  <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS"/>
+  <img src="https://img.shields.io/badge/Recharts-003366?style=for-the-badge&logo=recharts&logoColor=white" alt="Recharts"/>
+</p>
 
-Currently, two official plugins are available:
+This is the React frontend for the Smart Feedback Portal. It provides the user interface for customers to give feedback and for admins to manage it with AI-powered tools.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## ✨ Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+| 👤 Customer Features                     | 👑 Admin Features                             |
+| --------------------------------------- | --------------------------------------------- |
+| 🔐 Secure Sign up & Login               | 📊 View Analytics Dashboard                   |
+| 📢 View Admin Posts & Updates           | ✍️ Create & Manage Posts                      |
+| ❤️ Like, 💬 Comment, & Reply            | 🗂️ View & Manage All Complaints               |
+| 😠 Submit Complaints with Order Details | 🔎 Filter Complaints (Status, Severity)       |
+| 📊 Track Personal Complaint Status     | 🤖 Get AI-Suggested Replies for Complaints    |
+| ✅ Mark a Complaint as Resolved         | 💬 Filter & Reply to Comments with AI Help    |
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+---
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🛠️ Tech Stack & AI
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+* **Core**: React, React Router, Axios
+* **Styling**: Tailwind CSS
+* **Charts**: Recharts
+* **AI Models Used**:
+    * `twitter-roberta-base-sentiment`: For sentiment analysis on comments.
+    * `bart-large-mnli`: To determine complaint severity.
+    * `google/gemma-2-2b-it`: To suggest replies to admins.
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+---
+
+## 🚀 Getting Started
+
+1.  **Clone the repo and enter the directory:**
+    ```bash
+    git clone https://github.com/iitian360/BusinessGenAiProject
+    cd frontend
+    ```
+
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
+    > **Note:** Make sure the backend server is running first, as this frontend connects to its API.
+
+3.  **Start the development server:**
+    ```bash
+    npm run dev
+    ```
+    The app will be available at `http://localhost:5173`.
