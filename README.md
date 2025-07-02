@@ -40,7 +40,6 @@ This is the React frontend for the Smart Feedback Portal. It provides the user i
 1.  **Clone the repo and enter the directory:**
     ```bash
     git clone https://github.com/iitian360/BusinessGenAiProject
-    cd frontend
     ```
 
 2.  **Install dependencies:**

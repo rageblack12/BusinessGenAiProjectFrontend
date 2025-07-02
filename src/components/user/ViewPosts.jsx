@@ -108,7 +108,7 @@ const ViewPosts = () => {
   const handleCommentSubmit = async (postId) => {
     const content = comments[postId];
     if (!content.trim()) return;
-
+    console.log("content", content)
     try {
       console.log("coment start")
       const response = await addComment(postId, content);
@@ -118,7 +118,6 @@ const ViewPosts = () => {
           ? { ...post, comments: [...(post.comments || []), response.data] }
           : post
       ));
-
       setComments({ ...comments, [postId]: '' });
     } catch (error) {
       console.error('Error adding comment:', error);
