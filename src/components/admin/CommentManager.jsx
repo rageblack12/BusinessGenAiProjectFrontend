@@ -93,7 +93,7 @@ const CommentManager = () => {
 
   return (
     <div className="p-6 max-w-5xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6">Comment Sentiment Manager</h1>
+      <h1 className="text-2xl font-bold mb-6">Comment Sentiment Manager</h1>
 
       <div className="bg-white shadow p-4 mb-6 rounded-md flex flex-wrap gap-4 items-center">
         <div className="flex flex-col">

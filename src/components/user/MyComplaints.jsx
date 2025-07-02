@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getComplaintsByUser, sendComplaintReply, closeComplaint } from '../../api/complaintAPI';
+import { FaPaperPlane } from 'react-icons/fa';
+
 
 const MyComplaints = () => {
   const [complaints, setComplaints] = useState([]);
@@ -73,11 +75,10 @@ const MyComplaints = () => {
         </div>
       ) : (
         complaints.map((complaint) => (
-          <div key={complaint._id} className="bg-white shadow-md rounded-lg mb-4 p-4 relative">
-            <div className="flex justify-between items-start mb-3">
+          <div key={complaint._id} onClick={() => handleToggleExpand(complaint._id)} className="bg-white shadow-md rounded-lg mb-4 p-4 relative">
+            <div className="flex cursor-pointer justify-between items-start mb-3">
               <h3
                 className="text-lg font-semibold cursor-pointer"
-                onClick={() => handleToggleExpand(complaint._id)}
               >
                 Order #{complaint.orderId}
               </h3>
@@ -120,8 +121,8 @@ const MyComplaints = () => {
 
                 <div className="flex flex-col md:flex-row gap-3 mt-3">
                   <textarea
-                    rows={3}
-                    className="w-full border rounded p-2 text-sm"
+                    rows={2}
+                    className="w-full border rounded outline-none p-1 text-sm"
                     placeholder="Write a reply..."
                     value={replyTexts[complaint._id] || ''}
                     onChange={(e) => handleReplyChange(complaint._id, e.target.value)}
@@ -129,9 +130,9 @@ const MyComplaints = () => {
                   <button
                     onClick={() => handleSendReply(complaint._id)}
                     disabled={!replyTexts[complaint._id]?.trim()}
-                    className="bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-50"
+                    className="bg-green-600 text-white px-4 py-1 rounded disabled:opacity-50"
                   >
-                    📩 Send Reply
+                   <span> <FaPaperPlane/> </span>
                   </button>
                 </div>
               </>

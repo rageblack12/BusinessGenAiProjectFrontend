@@ -54,9 +54,10 @@ export const likePost = async (postId) => {
 
 
 // Add a comment to a post
-export const addComment = (postId, content) =>{
-  console.log(postId)
-  api.post('/comments/create', { content, postId });
+export const addComment = async(postId, content) =>{
+
+  console.log(postId, content)
+  return await api.post('/comments/create', { content, postId });
 }
 
 // Add a reply to a comment
@@ -65,5 +66,5 @@ export const addReply = async (commentId, content) => {
 };
 
 // Get AI reply
-export const getSuggestedReply = (sentiment, description) =>
-  api.post('/ai/suggestCommentReply', { sentiment, description });
+export const getSuggestedReply = async(sentiment, description) =>
+  await api.post('/ai/suggestCommentReply', { sentiment, description });

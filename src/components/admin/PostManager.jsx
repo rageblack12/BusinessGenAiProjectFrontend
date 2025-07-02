@@ -88,12 +88,11 @@ const PostManager = () => {
     if (!content.trim()) return;
     try {
       const response = await addComment(postId, content);
-      setPosts(posts.map(post => post._id === postId ? {
+      setPosts(posts.map(post => post.id === postId ? {
         ...post,
         comments: [...(post.comments || []), response.data]
       } : post));
       setComments({ ...comments, [postId]: '' });
-      loadPosts();
     } catch (error) {
       console.error('Error adding comment:', error);
     }
@@ -189,7 +188,7 @@ const PostManager = () => {
   return (
     <div className="p-4 max-w-4xl mx-auto">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Post Management</h1>
+        <h1 className="text-2xl font-bold">Post Management</h1>
         <button
           className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md shadow-sm"
           onClick={handleCreatePost}

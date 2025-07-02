@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { productTypes } from '../../utils/Data';
+import { FaPaperPlane } from 'react-icons/fa';
+
+
 import {
   getAllComplaints,
   getSuggestedReply,
@@ -75,7 +78,7 @@ const ComplaintManager = () => {
 
   return (
     <div className="p-6 max-w-5xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6">Complaint Management</h1>
+      <h1 className="text-2xl font-bold mb-6">Complaint Management</h1>
 
       <div className="bg-white rounded shadow p-4 mb-6">
         <h2 className="text-lg font-semibold mb-4">Filters</h2>
@@ -158,8 +161,8 @@ const ComplaintManager = () => {
 
                 <div className="flex flex-col md:flex-row gap-3">
                   <textarea
-                    rows={3}
-                    className="w-full border rounded p-2 text-sm"
+                    rows={1}
+                    className="w-full border rounded outline-none p-1 text-sm"
                     placeholder="Write your reply..."
                     value={replyTexts[complaint._id] || ''}
                     onChange={(e) => handleReplyChange(complaint._id, e.target.value)}
@@ -167,9 +170,9 @@ const ComplaintManager = () => {
                   <button
                     onClick={() => handleSendReply(complaint._id)}
                     disabled={!replyTexts[complaint._id]?.trim()}
-                    className="bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-50"
+                    className="bg-green-600 text-white px-4 py-2 rounded disabled:opacity-50"
                   >
-                    📩 Send
+                    <FaPaperPlane/>
                   </button>
                 </div>
               </>

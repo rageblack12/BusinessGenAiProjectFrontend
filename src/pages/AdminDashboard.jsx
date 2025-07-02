@@ -24,15 +24,32 @@ const AdminDashboard = () => {
     <div className="max-w-7xl mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
 
-      <div className="border-b border-gray-200">
+      {/* Mobile Dropdown */}
+      <div className="sm:hidden mb-4">
+        <select
+          value={tabValue}
+          onChange={(e) => setTabValue(Number(e.target.value))}
+          className="w-full p-2 border rounded-md"
+        >
+          {tabs.map((tab, index) => (
+            <option key={index} value={index}>
+              {tab.label}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Desktop Tabs */}
+      <div className="hidden sm:flex border-b border-gray-200 mb-4">
         <nav className="flex space-x-4">
           {tabs.map((tab, index) => (
             <button
               key={index}
               onClick={() => setTabValue(index)}
-              className={`px-4 py-2 text-sm font-medium rounded-t-md transition-colors
+              className={`flex items-center gap-2 px-4 py-1 rounded-lg transition font-medium
+                text-sm sm:text-base md:text-lg whitespace-nowrap cursor-pointer
                 ${tabValue === index
-                  ? 'bg-blue-600 text-white'
+                  ? 'bg-green-600 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
             >
               {tab.label}
@@ -45,15 +62,12 @@ const AdminDashboard = () => {
         <TabPanel value={tabValue} index={0}>
           <PostManager />
         </TabPanel>
-
         <TabPanel value={tabValue} index={1}>
           <ComplaintManager />
         </TabPanel>
-
         <TabPanel value={tabValue} index={2}>
           <CommentManager />
         </TabPanel>
-
         <TabPanel value={tabValue} index={3}>
           <Analytics />
         </TabPanel>

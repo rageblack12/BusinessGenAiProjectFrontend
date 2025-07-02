@@ -78,7 +78,7 @@ const RaiseComplaint = () => {
         {/* Vector Image Section */}
         <div className="w-full md:w-1/2">
           <img
-            src="\src\assets\complaint.png" // Replace with your actual image path
+            src="\src\assets\complaint.jpg" // Replace with your actual image path
             alt="Complaint Illustration"
             className="w-full h-auto object-contain"
           />

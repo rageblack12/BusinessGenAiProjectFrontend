@@ -120,7 +120,6 @@ const ViewPosts = () => {
       ));
 
       setComments({ ...comments, [postId]: '' });
-      await loadPosts(); // Refresh posts to ensure comments are updated
     } catch (error) {
       console.error('Error adding comment:', error);
     }
