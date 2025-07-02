@@ -10,6 +10,18 @@ This is the React frontend for the Smart Feedback Portal. It provides the user i
 
 ---
 
+## 🧪 Demo Credentials
+
+Use the following credentials to test the application:
+
+### 👑 Admin  
+- **Email**: `admin@gmail.com`  
+- **Password**: `12345`
+
+### 👤 User  
+- **Email**: `user@gmail.com`  
+- **Password**: `12345`
+
 ## ✨ Features
 
 | 👤 Customer Features                     | 👑 Admin Features                             |
