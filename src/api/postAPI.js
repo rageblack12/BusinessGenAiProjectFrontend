@@ -56,7 +56,7 @@ export const likePost = async (postId) => {
 // Add a comment to a post
 export const addComment = (postId, content) =>{
   console.log(postId)
-  api.post('/comments/create', { content, postId });
+  return api.post('/comments/create', { content, postId });
 }
 
 // Add a reply to a comment
