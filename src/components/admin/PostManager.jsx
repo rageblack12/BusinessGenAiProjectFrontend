@@ -93,6 +93,7 @@ const PostManager = () => {
         comments: [...(post.comments || []), response.data]
       } : post));
       setComments({ ...comments, [postId]: '' });
+      await loadPosts();
     } catch (error) {
       console.error('Error adding comment:', error);
     }

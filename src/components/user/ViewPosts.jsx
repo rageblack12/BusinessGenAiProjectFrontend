@@ -119,8 +119,10 @@ const ViewPosts = () => {
           : post
       ));
       setComments({ ...comments, [postId]: '' });
+      await loadPosts();
     } catch (error) {
       console.error('Error adding comment:', error);
+     
     }
   };
 
