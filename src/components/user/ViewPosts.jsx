@@ -114,8 +114,8 @@ const ViewPosts = () => {
       const response = await addComment(postId, content);
       console.log('Comment added:', response.data);
       setPosts(posts.map(post =>
-        post.id === postId
-          ? { ...post, comments: [...(post.comments || []), response.data] }
+        post._id === postId
+          ? { ...post, comments: [...(post.comments || []), response.data.comment] }
           : post
       ));
       setComments({ ...comments, [postId]: '' });

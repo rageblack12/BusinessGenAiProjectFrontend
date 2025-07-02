@@ -17,16 +17,6 @@ const PostManager = () => {
     loadPosts();
   }, []);
 
-  // const loadPosts = async () => {
-  //   try {
-  //     const response = await mockAPI.getPosts();
-  //     setPosts(response.data);
-  //   } catch (error) {
-  //     console.error('Error loading posts:', error);
-  //   }
-  // };
-
-
   const loadPosts = async () => {
     try {
       const response = await getPosts();
@@ -88,9 +78,9 @@ const PostManager = () => {
     if (!content.trim()) return;
     try {
       const response = await addComment(postId, content);
-      setPosts(posts.map(post => post.id === postId ? {
+      setPosts(posts.map(post => post._id === postId ? {
         ...post,
-        comments: [...(post.comments || []), response.data]
+        comments: [...(post.comments || []), response.data.comment]
       } : post));
       setComments({ ...comments, [postId]: '' });
       await loadPosts();
@@ -117,7 +107,6 @@ const PostManager = () => {
         )
       })));
       setReplyInputs(prev => ({ ...prev, [commentId]: '' }));
-      
     } catch (error) {
       console.error('Error submitting reply:', error);
     }
@@ -162,9 +151,7 @@ const PostManager = () => {
         response = await updatePost(editingPost._id, form);
         setPosts(posts.map(post => post._id === editingPost._id ? response.post : post));
       } else {
-        
         response = await createPost(form);
-      
         setPosts([response.post, ...posts]);
       }
       setOpenDialog(false);
@@ -183,43 +170,44 @@ const PostManager = () => {
     if (file) {
       setFormData({ ...formData, image: file });
     }
-
   };
 
   return (
-    <div className="p-4 max-w-4xl mx-auto">
+    <div className="p-4">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Post Management</h1>
-        <button
-          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md shadow-sm"
-          onClick={handleCreatePost}
-        >
+        <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md shadow-sm" onClick={handleCreatePost}>
           + Create Post
         </button>
       </div>
 
-      {posts.map(post => (
-        <div key={post._id} className="bg-white shadow-md rounded-lg mb-6 overflow-hidden">
+      {posts.map((post) => (
+        <div key={post._id} className="bg-white postBox rounded-lg mb-6 overflow-hidden p-2">
           {post.image?.url && (
-            <img src={post.image.url} alt={post.title} className="w-full h-72 object-cover" />
+            <img src={post.image.url} alt={post.title} className="w-full h-72 object-contain bg-gray-100 rounded" />
           )}
+
           <div className="p-4">
-            <div className="flex justify-between items-start mb-2">
-              <h2 className="text-xl font-semibold">{post.title}</h2>
+            <div className="flex justify-between mb-2">
+              <h3 className="text-xl font-semibold">{post.title}</h3>
               <div className="flex gap-3">
                 <button className="text-blue-500" onClick={() => handleEditPost(post)}><FaEdit /></button>
                 <button className="text-red-500" onClick={() => handleDeletePost(post._id)}><FaTrash /></button>
               </div>
             </div>
             <p className="text-gray-700 mb-4">{post.description}</p>
+
             <div className="flex items-center gap-4 mb-4">
-              <button onClick={() => handleLike(post._id)} className={`flex items-center gap-2 px-3 py-1 rounded-md text-white ${likedPosts.has(post._id) ? 'bg-red-500' : 'bg-blue-500'}`}>
+              <button onClick={() => handleLike(post._id)} className={`flex items-center gap-2 px-3 py-1 rounded-md ${likedPosts.has(post._id) ? 'text-red-500' : 'text-black'}`}>
                 {likedPosts.has(post._id) ? <FaHeart /> : <FaRegHeart />} {post.likes} Likes
               </button>
               <button onClick={() => toggleComments(post._id)} className="px-3 py-1 border border-gray-300 rounded-full text-sm">
                 {post.comments?.length || 0} Comments
               </button>
             </div>
+
+            <hr className="my-4" />
+
             {openComments[post._id] && (
               <div className="mt-4">
                 {post.comments?.map((comment) => (
@@ -227,9 +215,11 @@ const PostManager = () => {
                     <p className="text-blue-600 font-medium">{comment.user?.name || 'Unknown User'}</p>
                     <p className="text-sm">{comment.content}</p>
                     <p className="text-xs text-gray-500">{new Date(comment.createdAt).toLocaleString()}</p>
+
                     <button onClick={() => toggleReplies(comment._id)} className="text-sm text-blue-500 mt-1">
                       {showReplies[comment._id] ? 'Hide Replies' : 'View Replies'}
                     </button>
+
                     {showReplies[comment._id] && (
                       <div className="ml-4 mt-2">
                         {comment.replies?.map(reply => (
@@ -261,6 +251,7 @@ const PostManager = () => {
                     )}
                   </div>
                 ))}
+
                 <div className="flex items-center gap-2 mt-4">
                   <input
                     type="text"

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { getComplaintsByUser, sendComplaintReply, closeComplaint } from '../../api/complaintAPI';
 import { FaPaperPlane } from 'react-icons/fa';
 
-
 const MyComplaints = () => {
   const [complaints, setComplaints] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -53,7 +52,7 @@ const MyComplaints = () => {
       console.error('Error sending reply:', error);
     }
   };
-  
+
   const getStatusColor = (status) => {
     switch (status) {
       case 'resolved': return 'bg-green-100 text-green-700 border-green-300';
@@ -75,10 +74,11 @@ const MyComplaints = () => {
         </div>
       ) : (
         complaints.map((complaint) => (
-          <div key={complaint._id} onClick={() => handleToggleExpand(complaint._id)} className="bg-white shadow-md rounded-lg mb-4 p-4 relative">
-            <div className="flex cursor-pointer justify-between items-start mb-3">
+          <div key={complaint._id} className="bg-white shadow-md rounded-lg mb-4 p-4 relative">
+            <div className="flex justify-between items-start mb-3">
               <h3
                 className="text-lg font-semibold cursor-pointer"
+                onClick={() => handleToggleExpand(complaint._id)} 
               >
                 Order #{complaint.orderId}
               </h3>
@@ -92,7 +92,7 @@ const MyComplaints = () => {
                     onClick={() => handleMarkResolved(complaint._id)}
                     className="text-black border border-black text-sm px-3 py-1 rounded"
                   >
-                  Close issue
+                    Close issue
                   </button>
                 ) : null}
               </div>
@@ -132,7 +132,7 @@ const MyComplaints = () => {
                     disabled={!replyTexts[complaint._id]?.trim()}
                     className="bg-green-600 text-white px-4 py-1 rounded disabled:opacity-50"
                   >
-                   <span> <FaPaperPlane/> </span>
+                    <span><FaPaperPlane /></span>
                   </button>
                 </div>
               </>
