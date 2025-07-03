@@ -4,15 +4,15 @@ import ComplaintManager from '../components/admin/ComplaintManager';
 import CommentManager from '../components/admin/CommentManager';
 import Analytics from '../components/admin/Analytics';
 
+const TABS = [
+  { label: 'Posts', icon: '📝' },
+  { label: 'Complaints', icon: '🚨' },
+  { label: 'Comments', icon: '💬' },
+  { label: 'Analytics', icon: '📊' },
+];
+
 const AdminDashboard = () => {
   const [tabValue, setTabValue] = useState(0);
-
-  const tabs = [
-    { label: 'Posts' },
-    { label: 'Complaints' },
-    { label: 'Comments' },
-    { label: 'Analytics' },
-  ];
 
   const TabPanel = ({ children, value, index }) => (
     <div className={`${value !== index ? 'hidden' : ''} py-6`}>
@@ -31,9 +31,9 @@ const AdminDashboard = () => {
           onChange={(e) => setTabValue(Number(e.target.value))}
           className="w-full p-2 border rounded-md"
         >
-          {tabs.map((tab, index) => (
+          {TABS.map((tab, index) => (
             <option key={index} value={index}>
-              {tab.label}
+              {tab.icon} {tab.label}
             </option>
           ))}
         </select>
@@ -42,7 +42,7 @@ const AdminDashboard = () => {
       {/* Desktop Tabs */}
       <div className="hidden sm:flex border-b border-gray-200 mb-4">
         <nav className="flex space-x-4">
-          {tabs.map((tab, index) => (
+          {TABS.map((tab, index) => (
             <button
               key={index}
               onClick={() => setTabValue(index)}
@@ -52,7 +52,8 @@ const AdminDashboard = () => {
                   ? 'bg-green-600 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
             >
-              {tab.label}
+              <span>{tab.icon}</span>
+              <span>{tab.label}</span>
             </button>
           ))}
         </nav>

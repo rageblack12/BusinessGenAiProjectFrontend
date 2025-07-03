@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import ViewPosts from '../components/user/ViewPosts';
 import RaiseComplaint from '../components/user/RaiseComplaint';
 import MyComplaints from '../components/user/MyComplaints';
-import { BsFileEarmarkPost } from "react-icons/bs";
-
 
 const TABS = [
   { label: 'View Posts', icon: '📝' },
@@ -14,51 +12,63 @@ const TABS = [
 const UserDashboard = () => {
   const [tabValue, setTabValue] = useState(0);
 
-  const TabPanel = ({ children, index }) => (
-    <div hidden={tabValue !== index} className="py-4">
-      {tabValue === index && <div>{children}</div>}
+  const TabPanel = ({ children, value, index }) => (
+    <div className={`${value !== index ? 'hidden' : ''} py-6`}>
+      {value === index && children}
     </div>
   );
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-6">
-      <h1 className="text-3xl font-bold mb-6 text-gray-800">
-        Dashboard
-      </h1>
+    <div className="max-w-7xl mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold mb-6 text-gray-800">User Dashboard</h1>
 
-      <div className="border-b border-gray-300 mb-4 overflow-x-auto">
-        <div className="inline-flex space-x-2 px-2 sm:px-0 min-w-full">
+      {/* Mobile Dropdown */}
+      <div className="sm:hidden mb-4">
+        <select
+          value={tabValue}
+          onChange={(e) => setTabValue(Number(e.target.value))}
+          className="w-full p-2 border rounded-md"
+        >
+          {TABS.map((tab, index) => (
+            <option key={index} value={index}>
+              {tab.icon} {tab.label}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Desktop Tabs */}
+      <div className="hidden sm:flex border-b border-gray-200 mb-4">
+        <nav className="flex space-x-4">
           {TABS.map((tab, index) => (
             <button
               key={index}
               onClick={() => setTabValue(index)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-3xl transition font-medium
-          text-sm sm:text-base md:text-lg whitespace-nowrap cursor-pointer
-          ${tabValue === index
+              className={`flex items-center gap-2 px-4 py-1 rounded-lg transition font-medium
+                text-sm sm:text-base md:text-lg whitespace-nowrap cursor-pointer
+                ${tabValue === index
                   ? 'bg-green-600 text-white'
-                  : 'bg-gray-200 text-gray-700 shadow-md'
-                }`}
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
             >
-              <span className="text-base sm:text-lg">{tab.icon}</span>
+              <span>{tab.icon}</span>
               {tab.label}
             </button>
           ))}
-        </div>
+        </nav>
       </div>
 
-
-
-      <TabPanel index={0}>
-        <ViewPosts />
-      </TabPanel>
-
-      <TabPanel index={1}>
-        <RaiseComplaint />
-      </TabPanel>
-
-      <TabPanel index={2}>
-        <MyComplaints />
-      </TabPanel>
+      {/* Content Panels */}
+      <div className="bg-white shadow-md rounded-b-md p-4 mt-0">
+        <TabPanel value={tabValue} index={0}>
+          <ViewPosts />
+        </TabPanel>
+        <TabPanel value={tabValue} index={1}>
+          <RaiseComplaint />
+        </TabPanel>
+        <TabPanel value={tabValue} index={2}>
+          <MyComplaints />
+        </TabPanel>
+      </div>
     </div>
   );
 };
