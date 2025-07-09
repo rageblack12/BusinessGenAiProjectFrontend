@@ -1,14 +1,23 @@
 import { renderHook, act, waitFor } from '@testing-library/react';
-import '@testing-library/jest-dom';
+import '@testing-library/jest-dom/vitest';
+import { vi } from 'vitest';
 import { useComplaints } from '../hooks/useComplaints';
 import { complaintService } from '../services/complaintService';
 
 // Mock the complaint service
-jest.mock('../services/complaintService');
+vi.mock('../services/complaintService', () => ({
+  complaintService: {
+    getComplaintsByUser: vi.fn(),
+    getAllComplaints: vi.fn(),
+    raiseComplaint: vi.fn(),
+    closeComplaint: vi.fn(),
+    sendComplaintReply: vi.fn(),
+  }
+}));
 
 describe('useComplaints Hook', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('loads user complaints by default', async () => {
