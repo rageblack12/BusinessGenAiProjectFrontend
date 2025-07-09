@@ -1,21 +1,26 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom';
+import '@testing-library/jest-dom/vitest';
+import { vi } from 'vitest';
 import Navbar from '../components/layout/Navbar';
 import { USER_ROLES } from '../constants/roles';
 
-const mockNavigate = jest.fn();
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockNavigate,
-  Link: ({ children, to, ...props }) => <a href={to} {...props}>{children}</a>,
-}));
+const mockNavigate = vi.fn();
+
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+    Link: ({ children, to, ...props }) => <a href={to} {...props}>{children}</a>,
+  };
+});
 
 describe('Navbar Component', () => {
-  const mockOnLogout = jest.fn();
+  const mockOnLogout = vi.fn();
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('renders home link', () => {
@@ -26,17 +31,14 @@ describe('Navbar Component', () => {
   test('displays user information when logged in', () => {
     const mockUser = { name: 'John Doe', role: USER_ROLES.USER };
     render(<Navbar user={mockUser} onLogout={mockOnLogout} />);
-    
     expect(screen.getByText('John Doe (user)')).toBeInTheDocument();
   });
 
   test('shows dropdown menu when user icon is clicked', () => {
     const mockUser = { name: 'John Doe', role: USER_ROLES.USER };
     render(<Navbar user={mockUser} onLogout={mockOnLogout} />);
-    
     const userIcon = screen.getByRole('button');
     fireEvent.click(userIcon);
-    
     expect(screen.getByText('Dashboard')).toBeInTheDocument();
     expect(screen.getByText('Logout')).toBeInTheDocument();
   });
@@ -44,39 +46,24 @@ describe('Navbar Component', () => {
   test('navigates to user dashboard when dashboard is clicked', () => {
     const mockUser = { name: 'John Doe', role: USER_ROLES.USER };
     render(<Navbar user={mockUser} onLogout={mockOnLogout} />);
-    
-    const userIcon = screen.getByRole('button');
-    fireEvent.click(userIcon);
-    
-    const dashboardButton = screen.getByText('Dashboard');
-    fireEvent.click(dashboardButton);
-    
+    fireEvent.click(screen.getByRole('button'));
+    fireEvent.click(screen.getByText('Dashboard'));
     expect(mockNavigate).toHaveBeenCalledWith('/dashboard');
   });
 
   test('navigates to admin dashboard for admin user', () => {
     const mockUser = { name: 'Admin User', role: USER_ROLES.ADMIN };
     render(<Navbar user={mockUser} onLogout={mockOnLogout} />);
-    
-    const userIcon = screen.getByRole('button');
-    fireEvent.click(userIcon);
-    
-    const dashboardButton = screen.getByText('Dashboard');
-    fireEvent.click(dashboardButton);
-    
+    fireEvent.click(screen.getByRole('button'));
+    fireEvent.click(screen.getByText('Dashboard'));
     expect(mockNavigate).toHaveBeenCalledWith('/admin');
   });
 
   test('calls onLogout when logout is clicked', () => {
     const mockUser = { name: 'John Doe', role: USER_ROLES.USER };
     render(<Navbar user={mockUser} onLogout={mockOnLogout} />);
-    
-    const userIcon = screen.getByRole('button');
-    fireEvent.click(userIcon);
-    
-    const logoutButton = screen.getByText('Logout');
-    fireEvent.click(logoutButton);
-    
+    fireEvent.click(screen.getByRole('button'));
+    fireEvent.click(screen.getByText('Logout'));
     expect(mockOnLogout).toHaveBeenCalled();
     expect(mockNavigate).toHaveBeenCalledWith('/login');
   });
@@ -84,15 +71,9 @@ describe('Navbar Component', () => {
   test('closes menu when clicked outside', () => {
     const mockUser = { name: 'John Doe', role: USER_ROLES.USER };
     render(<Navbar user={mockUser} onLogout={mockOnLogout} />);
-    
-    const userIcon = screen.getByRole('button');
-    fireEvent.click(userIcon);
-    
+    fireEvent.click(screen.getByRole('button'));
     expect(screen.getByText('Dashboard')).toBeInTheDocument();
-    
-    // Click outside the menu
     fireEvent.mouseDown(document.body);
-    
     expect(screen.queryByText('Dashboard')).not.toBeInTheDocument();
   });
 });
