@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
+import '@testing-library/jest-dom/vitest'; // changed
 import Card from '../components/ui/Card';
 
 describe('Card Component', () => {
@@ -58,7 +58,7 @@ describe('Card Component', () => {
         <Card.Footer>Footer</Card.Footer>
       </Card>
     );
-    
+
     expect(screen.getByText('Header')).toBeInTheDocument();
     expect(screen.getByText('Content')).toBeInTheDocument();
     expect(screen.getByText('Footer')).toBeInTheDocument();

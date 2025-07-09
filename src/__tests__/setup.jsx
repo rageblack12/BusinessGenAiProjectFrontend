@@ -1,31 +1,35 @@
 import '@testing-library/jest-dom';
+import { vi } from 'vitest';
 
 // Mock react-router-dom
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => jest.fn(),
-  useLocation: () => ({ pathname: '/' }),
-  BrowserRouter: ({ children }) => <div data-testid="browser-router">{children}</div>,
-  Link: ({ children, to, ...props }) => <a href={to} {...props}>{children}</a>,
-}));
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
+  return {
+    ...actual,
+    useNavigate: () => vi.fn(),
+    useLocation: () => ({ pathname: '/' }),
+    BrowserRouter: ({ children }) => <div data-testid="browser-router">{children}</div>,
+    Link: ({ children, to, ...props }) => <a href={to} {...props}>{children}</a>,
+  };
+});
 
 // Mock react-hot-toast
-jest.mock('react-hot-toast', () => ({
+vi.mock('react-hot-toast', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
   },
   Toaster: () => null,
 }));
 
 // Mock AuthContext
-jest.mock('../context/AuthContext', () => ({
-  useAuth: jest.fn(() => ({
+vi.mock('../context/AuthContext', () => ({
+  useAuth: vi.fn(() => ({
     user: null,
     token: null,
-    login: jest.fn(),
-    register: jest.fn(),
-    logout: jest.fn(),
+    login: vi.fn(),
+    register: vi.fn(),
+    logout: vi.fn(),
     loading: false,
     isAuthenticated: false,
     isAdmin: false,
@@ -34,19 +38,19 @@ jest.mock('../context/AuthContext', () => ({
 }));
 
 // Mock API services
-jest.mock('../services/api', () => ({
+vi.mock('../services/api', () => ({
   __esModule: true,
   default: {
-    get: jest.fn(),
-    post: jest.fn(),
-    put: jest.fn(),
-    delete: jest.fn(),
-    patch: jest.fn(),
+    get: vi.fn(),
+    post: vi.fn(),
+    put: vi.fn(),
+    delete: vi.fn(),
+    patch: vi.fn(),
   },
 }));
 
 // Mock recharts
-jest.mock('recharts', () => ({
+vi.mock('recharts', () => ({
   PieChart: ({ children }) => <div data-testid="pie-chart">{children}</div>,
   Pie: () => <div data-testid="pie" />,
   Cell: () => <div data-testid="cell" />,

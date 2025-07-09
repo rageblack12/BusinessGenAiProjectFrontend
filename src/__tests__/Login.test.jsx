@@ -4,7 +4,7 @@ import '@testing-library/jest-dom';
 import Login from '../pages/Login';
 import { useAuth } from '../hooks/useAuth';
 
-// Mock the useAuth hook - this will override the setup.js mock for this test
+// Mock the useAuth hook - this will override the setup.jsx mock for this test
 jest.mock('../context/AuthContext');
 
 describe('Login Component', () => {

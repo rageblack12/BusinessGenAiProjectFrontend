@@ -1,10 +1,11 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import '@testing-library/jest-dom';
+import '@testing-library/jest-dom/vitest';
+import { vi } from 'vitest';
 import ComplaintForm from '../components/forms/ComplaintForm';
 
 describe('ComplaintForm Component', () => {
-  const mockOnSubmit = jest.fn();
+  const mockOnSubmit = vi.fn();
 
   beforeEach(() => {
     mockOnSubmit.mockClear();
@@ -12,7 +13,7 @@ describe('ComplaintForm Component', () => {
 
   test('renders complaint form fields', () => {
     render(<ComplaintForm onSubmit={mockOnSubmit} />);
-    
+
     expect(screen.getByLabelText(/order id/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/product type/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/description/i)).toBeInTheDocument();
@@ -21,7 +22,7 @@ describe('ComplaintForm Component', () => {
 
   test('shows validation errors for empty fields', async () => {
     render(<ComplaintForm onSubmit={mockOnSubmit} />);
-    
+
     const submitButton = screen.getByRole('button', { name: /raise complaint/i });
     fireEvent.click(submitButton);
 
@@ -36,12 +37,12 @@ describe('ComplaintForm Component', () => {
     mockOnSubmit.mockResolvedValue({ success: true });
 
     render(<ComplaintForm onSubmit={mockOnSubmit} />);
-    
+
     const orderIdInput = screen.getByLabelText(/order id/i);
     const productTypeSelect = screen.getByLabelText(/product type/i);
     const descriptionTextarea = screen.getByLabelText(/description/i);
     const submitButton = screen.getByRole('button', { name: /raise complaint/i });
-    
+
     fireEvent.change(orderIdInput, { target: { value: 'ORD-12345' } });
     fireEvent.change(productTypeSelect, { target: { value: 'Electronics' } });
     fireEvent.change(descriptionTextarea, { target: { value: 'Product not working' } });
@@ -60,12 +61,12 @@ describe('ComplaintForm Component', () => {
     mockOnSubmit.mockResolvedValue({ success: true });
 
     render(<ComplaintForm onSubmit={mockOnSubmit} />);
-    
+
     const orderIdInput = screen.getByLabelText(/order id/i);
     const productTypeSelect = screen.getByLabelText(/product type/i);
     const descriptionTextarea = screen.getByLabelText(/description/i);
     const submitButton = screen.getByRole('button', { name: /raise complaint/i });
-    
+
     fireEvent.change(orderIdInput, { target: { value: 'ORD-12345' } });
     fireEvent.change(productTypeSelect, { target: { value: 'Electronics' } });
     fireEvent.change(descriptionTextarea, { target: { value: 'Product not working' } });

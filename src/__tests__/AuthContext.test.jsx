@@ -1,16 +1,15 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import '@testing-library/jest-dom';
+import '@testing-library/jest-dom/vitest';
+import { describe, test, beforeEach, vi } from 'vitest';
 import { AuthProvider, useAuth } from '../context/AuthContext';
 import { authService } from '../services/authService';
 
-// Mock the authService
-jest.mock('../services/authService');
+vi.mock('../services/authService');
 
-// Test component to use the auth context
 const TestComponent = () => {
   const { user, token, login, register, logout, loading, isAuthenticated } = useAuth();
-  
+
   return (
     <div>
       <div data-testid="user">{user ? user.name : 'No user'}</div>
@@ -27,7 +26,7 @@ const TestComponent = () => {
 describe('AuthContext', () => {
   beforeEach(() => {
     localStorage.clear();
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('provides initial state', () => {
@@ -45,7 +44,7 @@ describe('AuthContext', () => {
   test('loads user and token from localStorage', async () => {
     const mockUser = { id: '1', name: 'Test User', role: 'user' };
     const mockToken = 'test-token';
-    
+
     localStorage.setItem('user', JSON.stringify(mockUser));
     localStorage.setItem('token', mockToken);
 
@@ -65,7 +64,7 @@ describe('AuthContext', () => {
   test('handles successful login', async () => {
     const mockUser = { id: '1', name: 'Test User', role: 'user' };
     const mockToken = 'test-token';
-    
+
     authService.login.mockResolvedValue({
       success: true,
       data: { user: mockUser, accessToken: mockToken }
@@ -113,7 +112,7 @@ describe('AuthContext', () => {
   test('handles logout', async () => {
     const mockUser = { id: '1', name: 'Test User', role: 'user' };
     const mockToken = 'test-token';
-    
+
     localStorage.setItem('user', JSON.stringify(mockUser));
     localStorage.setItem('token', mockToken);
 
@@ -125,7 +124,6 @@ describe('AuthContext', () => {
       </AuthProvider>
     );
 
-    // Wait for initial load
     await waitFor(() => {
       expect(screen.getByTestId('authenticated')).toHaveTextContent('Authenticated');
     });
