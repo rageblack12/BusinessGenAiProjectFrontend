@@ -1,41 +1,34 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
 import '@testing-library/jest-dom';
 import Login from '../pages/Login';
 import { useAuth } from '../hooks/useAuth';
 
-// Mock the useAuth hook
-jest.mock('../hooks/useAuth');
-
-// Mock react-router-dom
-const mockNavigate = jest.fn();
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockNavigate,
-}));
-
-const renderLogin = () => {
-  return render(
-    <BrowserRouter>
-      <Login />
-    </BrowserRouter>
-  );
-};
+// Mock the useAuth hook - this will override the setup.js mock for this test
+jest.mock('../context/AuthContext');
 
 describe('Login Component', () => {
   const mockLogin = jest.fn();
+  const mockNavigate = jest.fn();
+
+  // Mock useNavigate
+  jest.mock('react-router-dom', () => ({
+    ...jest.requireActual('react-router-dom'),
+    useNavigate: () => mockNavigate,
+  }));
 
   beforeEach(() => {
+    const { useAuth } = require('../context/AuthContext');
     useAuth.mockReturnValue({
       login: mockLogin,
+      loading: false,
     });
     mockLogin.mockClear();
     mockNavigate.mockClear();
   });
 
   test('renders login form', () => {
-    renderLogin();
+    render(<Login />);
     
     expect(screen.getByText('Login')).toBeInTheDocument();
     expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
@@ -44,7 +37,7 @@ describe('Login Component', () => {
   });
 
   test('shows validation errors for empty fields', async () => {
-    renderLogin();
+    render(<Login />);
     
     const submitButton = screen.getByRole('button', { name: /login/i });
     fireEvent.click(submitButton);
@@ -56,7 +49,7 @@ describe('Login Component', () => {
   });
 
   test('shows validation error for invalid email', async () => {
-    renderLogin();
+    render(<Login />);
     
     const emailInput = screen.getByLabelText(/email/i);
     const submitButton = screen.getByRole('button', { name: /login/i });
@@ -75,7 +68,7 @@ describe('Login Component', () => {
       data: { user: { role: 'user' } } 
     });
 
-    renderLogin();
+    render(<Login />);
     
     const emailInput = screen.getByLabelText(/email/i);
     const passwordInput = screen.getByLabelText(/password/i);
