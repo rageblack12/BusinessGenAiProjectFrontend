@@ -52,7 +52,9 @@ describe('usePosts Hook', () => {
     postService.getPosts.mockResolvedValue({
       data: { posts: mockPosts }
     });
-    postService.likePost.mockResolvedValue({ success: true });
+    postService.likePost.mockResolvedValue({
+      data: { message: 'Post liked' }
+    });
 
     const { result } = renderHook(() => usePosts());
 
@@ -69,7 +71,7 @@ describe('usePosts Hook', () => {
   });
 
   test('creates post successfully', async () => {
-    const mockPost = { _id: '2', title: 'New Post' };
+    const mockPost = { _id: '2', title: 'New Post', likes: 0, likedBy: [] };
     postService.getPosts.mockResolvedValue({ data: { posts: [] } });
     postService.createPost.mockResolvedValue({ post: mockPost });
 
@@ -89,8 +91,8 @@ describe('usePosts Hook', () => {
   });
 
   test('updates post successfully', async () => {
-    const mockPosts = [{ _id: '1', title: 'Original Title' }];
-    const updatedPost = { _id: '1', title: 'Updated Title' };
+    const mockPosts = [{ _id: '1', title: 'Original Title', likes: 0, likedBy: [] }];
+    const updatedPost = { _id: '1', title: 'Updated Title', likes: 0, likedBy: [] };
 
     postService.getPosts.mockResolvedValue({ data: { posts: mockPosts } });
     postService.updatePost.mockResolvedValue({ post: updatedPost });
@@ -112,12 +114,14 @@ describe('usePosts Hook', () => {
 
   test('deletes post successfully', async () => {
     const mockPosts = [
-      { _id: '1', title: 'Test Post' },
-      { _id: '2', title: 'Another Post' }
+      { _id: '1', title: 'Test Post', likes: 0, likedBy: [] },
+      { _id: '2', title: 'Another Post', likes: 0, likedBy: [] }
     ];
 
     postService.getPosts.mockResolvedValue({ data: { posts: mockPosts } });
-    postService.deletePost.mockResolvedValue({ success: true });
+    postService.deletePost.mockResolvedValue({
+      data: { message: 'Post deleted' }
+    });
 
     const { result } = renderHook(() => usePosts());
 

@@ -64,7 +64,9 @@ describe('useComplaints Hook', () => {
   });
 
   test('raises complaint successfully', async () => {
-    complaintService.raiseComplaint.mockResolvedValue({ success: true });
+    complaintService.raiseComplaint.mockResolvedValue({
+      data: { complaint: { _id: '1', orderId: 'ORD-001' } }
+    });
     complaintService.getComplaintsByUser.mockResolvedValue({
       data: { complaints: [], totalPages: 1, currentPage: 1 }
     });
@@ -93,7 +95,9 @@ describe('useComplaints Hook', () => {
   });
 
   test('closes complaint successfully', async () => {
-    complaintService.closeComplaint.mockResolvedValue({ success: true });
+    complaintService.closeComplaint.mockResolvedValue({
+      data: { message: 'Complaint closed' }
+    });
     complaintService.getComplaintsByUser.mockResolvedValue({
       data: { complaints: [], totalPages: 1, currentPage: 1 }
     });
@@ -112,7 +116,9 @@ describe('useComplaints Hook', () => {
   });
 
   test('sends reply successfully', async () => {
-    complaintService.sendComplaintReply.mockResolvedValue({ success: true });
+    complaintService.sendComplaintReply.mockResolvedValue({
+      data: { reply: { _id: '1', content: 'Test reply' } }
+    });
     complaintService.getComplaintsByUser.mockResolvedValue({
       data: { complaints: [], totalPages: 1, currentPage: 1 }
     });

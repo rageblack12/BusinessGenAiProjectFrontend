@@ -6,6 +6,13 @@ import { AuthProvider, useAuth } from '../context/AuthContext';
 import { authService } from '../services/authService';
 
 vi.mock('../services/authService');
+vi.mock('react-hot-toast', () => ({
+  __esModule: true,
+  default: {
+    success: vi.fn(),
+    error: vi.fn(),
+  }
+}));
 
 const TestComponent = () => {
   const { user, token, login, register, logout, loading, isAuthenticated } = useAuth();

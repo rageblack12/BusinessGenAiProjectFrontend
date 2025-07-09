@@ -14,9 +14,9 @@ describe('ComplaintForm Component', () => {
   test('renders complaint form fields', () => {
     render(<ComplaintForm onSubmit={mockOnSubmit} />);
 
-    expect(screen.getByLabelText(/order id/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/product type/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/description/i)).toBeInTheDocument();
+    expect(screen.getByLabelText('Order ID')).toBeInTheDocument();
+    expect(screen.getByLabelText('Product Type')).toBeInTheDocument();
+    expect(screen.getByLabelText('Description')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /raise complaint/i })).toBeInTheDocument();
   });
 
@@ -38,9 +38,9 @@ describe('ComplaintForm Component', () => {
 
     render(<ComplaintForm onSubmit={mockOnSubmit} />);
 
-    const orderIdInput = screen.getByLabelText(/order id/i);
-    const productTypeSelect = screen.getByLabelText(/product type/i);
-    const descriptionTextarea = screen.getByLabelText(/description/i);
+    const orderIdInput = screen.getByLabelText('Order ID');
+    const productTypeSelect = screen.getByLabelText('Product Type');
+    const descriptionTextarea = screen.getByLabelText('Description');
     const submitButton = screen.getByRole('button', { name: /raise complaint/i });
 
     fireEvent.change(orderIdInput, { target: { value: 'ORD-12345' } });
@@ -62,9 +62,9 @@ describe('ComplaintForm Component', () => {
 
     render(<ComplaintForm onSubmit={mockOnSubmit} />);
 
-    const orderIdInput = screen.getByLabelText(/order id/i);
-    const productTypeSelect = screen.getByLabelText(/product type/i);
-    const descriptionTextarea = screen.getByLabelText(/description/i);
+    const orderIdInput = screen.getByLabelText('Order ID');
+    const productTypeSelect = screen.getByLabelText('Product Type');
+    const descriptionTextarea = screen.getByLabelText('Description');
     const submitButton = screen.getByRole('button', { name: /raise complaint/i });
 
     fireEvent.change(orderIdInput, { target: { value: 'ORD-12345' } });

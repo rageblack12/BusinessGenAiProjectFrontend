@@ -27,7 +27,7 @@ describe('Input Component', () => {
   });
 
   test('handles input changes', () => {
-    const handleChange = vi.fn(); // changed from jest.fn()
+    const handleChange = vi.fn();
     render(<Input label="Test" onChange={handleChange} />);
     
     const input = screen.getByLabelText('Test');
@@ -42,5 +42,17 @@ describe('Input Component', () => {
     const input = screen.getByLabelText('Test');
     expect(input).toHaveAttribute('placeholder', 'Enter text');
     expect(input).toHaveAttribute('type', 'email');
+  });
+
+  test('generates unique id when not provided', () => {
+    render(<Input label="Test" />);
+    const input = screen.getByLabelText('Test');
+    expect(input).toHaveAttribute('id');
+  });
+
+  test('uses provided id', () => {
+    render(<Input label="Test" id="custom-id" />);
+    const input = screen.getByLabelText('Test');
+    expect(input).toHaveAttribute('id', 'custom-id');
   });
 });
