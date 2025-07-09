@@ -1,23 +1,34 @@
+
+
 import React, { useState, useEffect } from 'react';
 import { getComplaintsByUser, sendComplaintReply, closeComplaint } from '../../api/complaintAPI';
 import { FaPaperPlane } from 'react-icons/fa';
+
 
 const MyComplaints = () => {
   const [complaints, setComplaints] = useState([]);
   const [loading, setLoading] = useState(true);
   const [expandedComplaint, setExpandedComplaint] = useState(null);
   const [replyTexts, setReplyTexts] = useState({});
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const complaintsPerPage = 3;
 
   useEffect(() => {
-    loadComplaints();
+    loadComplaints(currentPage);
   }, []);
 
-  const loadComplaints = async () => {
+  const loadComplaints = async (page = 1) => {
+    setLoading(true);
     try {
-      const response = await getComplaintsByUser();
-      setComplaints(response.data || []);
+      const response = await getComplaintsByUser(page, complaintsPerPage);
+      const data = response.data.complaints || [];
+      setComplaints(data);
+      setTotalPages(response.data.totalPages || 1);
+      setCurrentPage(response.data.currentPage || 1);
+
       const replies = {};
-      (response.data || []).forEach((c) => replies[c._id] = '');
+      data.forEach((c) => (replies[c._id] = ''));
       setReplyTexts(replies);
     } catch (error) {
       console.error('Error loading complaints:', error);
@@ -32,7 +43,7 @@ const MyComplaints = () => {
   const handleMarkResolved = async (id) => {
     try {
       await closeComplaint(id);
-      await loadComplaints();
+      await loadComplaints(currentPage);
     } catch (error) {
       console.error('Error marking complaint as resolved:', error);
     }
@@ -47,10 +58,17 @@ const MyComplaints = () => {
     if (!reply.trim()) return;
     try {
       await sendComplaintReply(id, reply);
-      await loadComplaints();
+      await loadComplaints(currentPage);
     } catch (error) {
       console.error('Error sending reply:', error);
     }
+  };
+
+
+  const handlePageChange = (pageNumber) => {
+    if (pageNumber < 1 || pageNumber > totalPages) return;
+    setCurrentPage(pageNumber);
+    loadComplaints(pageNumber);
   };
 
   const getStatusColor = (status) => {
@@ -74,11 +92,11 @@ const MyComplaints = () => {
         </div>
       ) : (
         complaints.map((complaint) => (
-          <div key={complaint._id} className="bg-white shadow-md rounded-lg mb-4 p-4 relative">
-            <div className="flex justify-between items-start mb-3">
+          <div key={complaint._id}  className="bg-white shadow-md rounded-lg mb-4 p-4 relative">
+            <div className="flex cursor-pointer justify-between items-start mb-3">
               <h3
                 className="text-lg font-semibold cursor-pointer"
-                onClick={() => handleToggleExpand(complaint._id)} 
+                onClick={() => handleToggleExpand(complaint._id)}
               >
                 Order #{complaint.orderId}
               </h3>
@@ -132,7 +150,7 @@ const MyComplaints = () => {
                     disabled={!replyTexts[complaint._id]?.trim()}
                     className="bg-green-600 text-white px-4 py-1 rounded disabled:opacity-50"
                   >
-                    <span><FaPaperPlane /></span>
+                    <span> <FaPaperPlane /> </span>
                   </button>
                 </div>
               </>
@@ -140,8 +158,24 @@ const MyComplaints = () => {
           </div>
         ))
       )}
+
+
+      {/* Pagination Controls */}
+      <div className="flex justify-center mt-4 gap-2">
+        {Array.from({ length: totalPages }, (_, i) => (
+          <button
+            key={i}
+            onClick={() => handlePageChange(i + 1)}
+            className={`px-3 py-1 rounded border ${currentPage === i + 1 ? 'bg-blue-500 text-white' : 'bg-white text-blue-500'}`}
+          >
+            {i + 1}
+          </button>
+        ))}
+      </div>
+
     </div>
   );
 };
 
 export default MyComplaints;
+

@@ -1,5 +1,6 @@
-import axios from 'axios';
 
+import dotenv from 'dotenv';
+import axios from 'axios';
 const API_BASE_URL = 'https://businessgenaibackend.onrender.com/api'; 
 
 const api = axios.create({
