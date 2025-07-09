@@ -7,7 +7,7 @@ import Button from '../ui/Button';
 import LoadingSpinner from '../ui/LoadingSpinner';
 
 const ViewPosts = () => {
-  const { posts, loading, likedPosts, handleLike, loadPosts } = usePosts();
+  const { posts, setPosts, loading, likedPosts, handleLike, loadPosts } = usePosts();
   const [replyInputs, setReplyInputs] = useState({});
   const [showReplies, setShowReplies] = useState({});
   const [openComments, setOpenComments] = useState({});

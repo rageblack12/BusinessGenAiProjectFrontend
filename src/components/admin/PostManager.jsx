@@ -8,7 +8,7 @@ import Modal from '../ui/Modal';
 import LoadingSpinner from '../ui/LoadingSpinner';
 
 const PostManager = () => {
-  const { posts, loading, likedPosts, handleLike, createPost, updatePost, deletePost, loadPosts } = usePosts();
+  const { posts, setPosts, loading, likedPosts, handleLike, createPost, updatePost, deletePost, loadPosts } = usePosts();
   const [openDialog, setOpenDialog] = useState(false);
   const [editingPost, setEditingPost] = useState(null);
   const [formData, setFormData] = useState({ title: '', description: '', image: '' });
