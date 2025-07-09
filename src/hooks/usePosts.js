@@ -89,6 +89,7 @@ export const usePosts = () => {
 
   return {
     posts,
+    setPosts,
     loading,
     likedPosts,
     loadPosts,

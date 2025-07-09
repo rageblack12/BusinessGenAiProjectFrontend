@@ -38,9 +38,22 @@ const ViewPosts = () => {
     if (!content?.trim()) return;
     
     try {
-      await postService.addReply(commentId, content);
+      const response = await postService.addReply(commentId, content);
+      const newReply = response.data.reply;
+      
+      // Update posts state locally instead of reloading all posts
+      setPosts(prevPosts => 
+        prevPosts.map(post => ({
+          ...post,
+          comments: post.comments?.map(comment => 
+            comment._id === commentId
+              ? { ...comment, replies: [...(comment.replies || []), newReply] }
+              : comment
+          ) || []
+        }))
+      );
+      
       setReplyInputs(prev => ({ ...prev, [commentId]: '' }));
-      await loadPosts();
     } catch (error) {
       console.error('Error submitting reply:', error);
     }
@@ -51,9 +64,19 @@ const ViewPosts = () => {
     if (!content?.trim()) return;
     
     try {
-      await postService.addComment(postId, content);
+      const response = await postService.addComment(postId, content);
+      const newComment = response.data.comment;
+      
+      // Update posts state locally instead of reloading all posts
+      setPosts(prevPosts => 
+        prevPosts.map(post => 
+          post._id === postId 
+            ? { ...post, comments: [...(post.comments || []), newComment] }
+            : post
+        )
+      );
+      
       setComments({ ...comments, [postId]: '' });
-      await loadPosts();
     } catch (error) {
       console.error('Error adding comment:', error);
     }
