@@ -1,30 +1,39 @@
 import { renderHook, act, waitFor } from '@testing-library/react';
-import '@testing-library/jest-dom';
+import '@testing-library/jest-dom/vitest';
+import { vi } from 'vitest';
 import { usePosts } from '../hooks/usePosts';
 import { postService } from '../services/postService';
 
 // Mock the post service
-jest.mock('../services/postService');
+vi.mock('../services/postService', () => ({
+  postService: {
+    getPosts: vi.fn(),
+    likePost: vi.fn(),
+    createPost: vi.fn(),
+    updatePost: vi.fn(),
+    deletePost: vi.fn(),
+  }
+}));
 
 // Mock localStorage
 const mockLocalStorage = {
-  getItem: jest.fn(),
-  setItem: jest.fn(),
-  removeItem: jest.fn(),
+  getItem: vi.fn(),
+  setItem: vi.fn(),
+  removeItem: vi.fn(),
 };
-Object.defineProperty(window, 'localStorage', { value: mockLocalStorage });
+Object.defineProperty(window, 'localStorage', {
+  value: mockLocalStorage,
+  writable: true,
+});
 
 describe('usePosts Hook', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mockLocalStorage.getItem.mockReturnValue(JSON.stringify({ id: 'user-1' }));
   });
 
   test('loads posts successfully', async () => {
-    const mockPosts = [
-      { _id: '1', title: 'Test Post', likes: 5, likedBy: [] }
-    ];
-
+    const mockPosts = [{ _id: '1', title: 'Test Post', likes: 5, likedBy: [] }];
     postService.getPosts.mockResolvedValue({
       data: { posts: mockPosts }
     });
@@ -39,10 +48,7 @@ describe('usePosts Hook', () => {
   });
 
   test('handles like functionality', async () => {
-    const mockPosts = [
-      { _id: '1', title: 'Test Post', likes: 5, likedBy: [] }
-    ];
-
+    const mockPosts = [{ _id: '1', title: 'Test Post', likes: 5, likedBy: [] }];
     postService.getPosts.mockResolvedValue({
       data: { posts: mockPosts }
     });
@@ -64,10 +70,7 @@ describe('usePosts Hook', () => {
 
   test('creates post successfully', async () => {
     const mockPost = { _id: '2', title: 'New Post' };
-    
-    postService.getPosts.mockResolvedValue({
-      data: { posts: [] }
-    });
+    postService.getPosts.mockResolvedValue({ data: { posts: [] } });
     postService.createPost.mockResolvedValue({ post: mockPost });
 
     const { result } = renderHook(() => usePosts());
@@ -86,14 +89,10 @@ describe('usePosts Hook', () => {
   });
 
   test('updates post successfully', async () => {
-    const mockPosts = [
-      { _id: '1', title: 'Original Title' }
-    ];
+    const mockPosts = [{ _id: '1', title: 'Original Title' }];
     const updatedPost = { _id: '1', title: 'Updated Title' };
 
-    postService.getPosts.mockResolvedValue({
-      data: { posts: mockPosts }
-    });
+    postService.getPosts.mockResolvedValue({ data: { posts: mockPosts } });
     postService.updatePost.mockResolvedValue({ post: updatedPost });
 
     const { result } = renderHook(() => usePosts());
@@ -117,9 +116,7 @@ describe('usePosts Hook', () => {
       { _id: '2', title: 'Another Post' }
     ];
 
-    postService.getPosts.mockResolvedValue({
-      data: { posts: mockPosts }
-    });
+    postService.getPosts.mockResolvedValue({ data: { posts: mockPosts } });
     postService.deletePost.mockResolvedValue({ success: true });
 
     const { result } = renderHook(() => usePosts());
