@@ -100,7 +100,7 @@ const ViewPosts = () => {
 
   if (loading) return <LoadingSpinner size="lg" />;
 
-      const newReply = response.data.reply || response.data;
+  return (
     <div className="p-4">
       <h2 className="text-2xl font-bold mb-6">Latest Posts</h2>
 
