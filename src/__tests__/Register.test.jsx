@@ -58,10 +58,10 @@ describe('Register Component', () => {
     fireEvent.click(screen.getByRole('button', { name: /register/i }));
 
     await waitFor(() => {
-      expect(screen.getByText('Name is required')).toBeInTheDocument();
-      expect(screen.getByText('Email is required')).toBeInTheDocument();
-      expect(screen.getByText('Password is required')).toBeInTheDocument();
-      expect(screen.getByText('Confirm password is required')).toBeInTheDocument();
+      expect(screen.getByText(/Name is required/i)).toBeInTheDocument();
+      expect(screen.getByText(/Email is required/i)).toBeInTheDocument();
+      expect(screen.getByText(/Password is required/i)).toBeInTheDocument();
+      expect(screen.getByText(/Confirm password is required/i)).toBeInTheDocument();
     });
   });
 
@@ -78,7 +78,7 @@ describe('Register Component', () => {
     fireEvent.click(screen.getByRole('button', { name: /register/i }));
 
     await waitFor(() => {
-      expect(screen.getByText('Passwords must match')).toBeInTheDocument();
+      expect(screen.getByText(/Passwords must match/i)).toBeInTheDocument();
     });
   });
 

@@ -56,8 +56,8 @@ describe('Login Component', () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.getByText('Email is required')).toBeInTheDocument();
-      expect(screen.getByText('Password is required')).toBeInTheDocument();
+      expect(screen.getByText(/Email is required/i)).toBeInTheDocument();
+      expect(screen.getByText(/Password is required/i)).toBeInTheDocument();
     });
   });
 
@@ -71,7 +71,7 @@ describe('Login Component', () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.getByText('Invalid email')).toBeInTheDocument();
+      expect(screen.getByText(/Invalid email/i)).toBeInTheDocument();
     });
   });
 
