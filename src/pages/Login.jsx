@@ -14,7 +14,10 @@ const Login = () => {
     const result = await login(data.email, data.password);
     
     if (result.success && result.user?.role) {
-      navigate(result.user.role === USER_ROLES.ADMIN ? '/admin' : '/dashboard');
+      // Add a small delay to ensure token is saved and state is updated
+      setTimeout(() => {
+        navigate(result.user.role === USER_ROLES.ADMIN ? '/admin' : '/dashboard');
+      }, 150);
     } else {
       console.error("Login result invalid or role missing:", result);
     }

@@ -27,10 +27,17 @@ export const useAuth = () => {
       const { user, accessToken } = result.data;
 
       if (user && accessToken) {
+        // Save to localStorage first
         localStorage.setItem('user', JSON.stringify(user));
         localStorage.setItem('token', accessToken);
+        
+        // Update state synchronously
         setUser(user);
         setToken(accessToken);
+        
+        // Small delay to ensure state is updated
+        await new Promise(resolve => setTimeout(resolve, 100));
+        
         toast.success('Login successful!');
         return { success: true, user };
       } else {
