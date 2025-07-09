@@ -15,10 +15,11 @@ const UserDashboard = lazy(() => import('./pages/UserDashboard'));
 const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
 
 const AppRoutes = () => {
-  const { user, loading, logout } = useAuth();
+  const { user, token, loading, logout } = useAuth();
+  
 
   return (
-    <Layout>
+    <Layout user={user} onLogout={logout}>
       <div className="min-h-screen bg-gray-50 text-gray-900">
         <Routes>
           <Route
@@ -31,26 +32,26 @@ const AppRoutes = () => {
               )
             }
           />
-          <Route 
-            path="/login" 
+          <Route
+            path="/login"
             element={
               <Suspense fallback={<LoadingSpinner size="lg" />}>
                 <Login />
               </Suspense>
-            } 
+            }
           />
-          <Route 
-            path="/register" 
+          <Route
+            path="/register"
             element={
               <Suspense fallback={<LoadingSpinner size="lg" />}>
                 <Register />
               </Suspense>
-            } 
+            }
           />
           <Route
             path="/dashboard"
             element={
-              <ProtectedRoute user={user} loading={loading}>
+              <ProtectedRoute user={user}  token={token} loading={loading}>
                 <Suspense fallback={<LoadingSpinner size="lg" />}>
                   <UserDashboard />
                 </Suspense>
@@ -60,7 +61,7 @@ const AppRoutes = () => {
           <Route
             path="/admin"
             element={
-              <ProtectedRoute user={user} loading={loading} adminOnly={true}>
+              <ProtectedRoute user={user} token={token} loading={loading} adminOnly={true}>
                 <Suspense fallback={<LoadingSpinner size="lg" />}>
                   <AdminDashboard />
                 </Suspense>
@@ -72,6 +73,7 @@ const AppRoutes = () => {
     </Layout>
   );
 };
+  
 
 const App = () => {
   return (

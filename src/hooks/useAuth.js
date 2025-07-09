@@ -4,58 +4,74 @@ import toast from 'react-hot-toast';
 
 export const useAuth = () => {
   const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check if user data exists in localStorage (for initial load only)
+    // Load user and token from localStorage on initial mount
     const storedUser = localStorage.getItem('user');
-    if (storedUser) {
+    const storedToken = localStorage.getItem('token');
+
+    if (storedUser && storedToken) {
       setUser(JSON.parse(storedUser));
+      setToken(storedToken);
     }
+
     setLoading(false);
   }, []);
 
   const login = async (email, password) => {
     const result = await authService.login(email, password);
-    
+
     if (result.success) {
-      const { user } = result.data;
-      setUser(user);
-      localStorage.setItem('user', JSON.stringify(user));
-      toast.success('Login successful!');
+      const { user, accessToken } = result.data;
+
+      if (user && accessToken) {
+        localStorage.setItem('user', JSON.stringify(user));
+        localStorage.setItem('token', accessToken);
+        setUser(user);
+        setToken(accessToken);
+        toast.success('Login successful!');
+        return { success: true, user };
+      } else {
+        toast.error('Invalid login response.');
+        return { success: false, error: 'Invalid server response' };
+      }
     } else {
-      toast.error(result.error);
+      toast.error(result.error || 'Login failed.');
+      return result;
     }
-    
-    return result;
   };
 
   const register = async (userData) => {
     const result = await authService.register(userData);
-    
+
     if (result.success) {
       toast.success('Registration successful! Please login.');
     } else {
-      toast.error(result.error);
+      toast.error(result.error || 'Registration failed.');
     }
-    
+
     return result;
   };
 
   const logout = async () => {
     await authService.logout();
     setUser(null);
+    setToken(null);
     localStorage.removeItem('user');
+    localStorage.removeItem('token');
     toast.success('Logged out successfully');
   };
 
   return {
     user,
+    token,
     login,
     register,
     logout,
     loading,
-    isAuthenticated: !!user,
+    isAuthenticated: !!user && !!token,
     isAdmin: user?.role === 'admin',
   };
 };

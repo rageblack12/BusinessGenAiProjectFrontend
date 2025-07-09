@@ -13,8 +13,10 @@ const Login = () => {
     setLoading(true);
     const result = await login(data.email, data.password);
     
-    if (result.success) {
-      navigate(result.data.user.role === USER_ROLES.ADMIN ? '/admin' : '/dashboard');
+    if (result.success && result.user?.role) {
+      navigate(result.user.role === USER_ROLES.ADMIN ? '/admin' : '/dashboard');
+    } else {
+      console.error("Login result invalid or role missing:", result);
     }
     
     setLoading(false);

@@ -1,9 +1,15 @@
-import React from 'react';
-import { Navigate } from 'react-router-dom';
-import { USER_ROLES } from '../../constants/roles';
-import LoadingSpinner from '../ui/LoadingSpinner';
+import React from "react";
+import { Navigate } from "react-router-dom";
+import { USER_ROLES } from "../../constants/roles";
+import LoadingSpinner from "../ui/LoadingSpinner";
 
-const ProtectedRoute = ({ children, user, loading, adminOnly = false }) => {
+const ProtectedRoute = ({
+  children,
+  user,
+  token,
+  loading,
+  adminOnly = false,
+}) => {
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-[50vh]">
@@ -11,8 +17,14 @@ const ProtectedRoute = ({ children, user, loading, adminOnly = false }) => {
       </div>
     );
   }
+  
+  if (!token) {
+    console.log("HI");
+    return <Navigate to="/login" />;
+  }
 
   if (!user) {
+    console.log("ho");
     return <Navigate to="/login" replace />;
   }
 
