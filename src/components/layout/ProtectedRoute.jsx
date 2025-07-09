@@ -19,7 +19,6 @@ const ProtectedRoute = ({
   }
   
   if (!token) {
-    console.log("No token");
     return <Navigate to="/login" />;
   }
 
