@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom';
+import '@testing-library/jest-dom/vitest';
+import { vi } from 'vitest';
 import Input from '../components/ui/Input';
 
 describe('Input Component', () => {
@@ -26,7 +27,7 @@ describe('Input Component', () => {
   });
 
   test('handles input changes', () => {
-    const handleChange = jest.fn();
+    const handleChange = vi.fn(); // changed from jest.fn()
     render(<Input label="Test" onChange={handleChange} />);
     
     const input = screen.getByLabelText('Test');
