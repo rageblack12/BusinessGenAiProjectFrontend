@@ -1,7 +1,7 @@
 import React, { Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
-import { useAuth } from './hooks/useAuth';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import { USER_ROLES } from './constants/roles';
 import Layout from './components/layout/Layout';
 import ProtectedRoute from './components/layout/ProtectedRoute';
@@ -16,7 +16,6 @@ const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
 
 const AppRoutes = () => {
   const { user, token, loading, logout } = useAuth();
-  
 
   return (
     <Layout user={user} onLogout={logout}>
@@ -51,7 +50,7 @@ const AppRoutes = () => {
           <Route
             path="/dashboard"
             element={
-              <ProtectedRoute user={user}  token={token} loading={loading}>
+              <ProtectedRoute user={user} token={token} loading={loading}>
                 <Suspense fallback={<LoadingSpinner size="lg" />}>
                   <UserDashboard />
                 </Suspense>
@@ -73,23 +72,24 @@ const AppRoutes = () => {
     </Layout>
   );
 };
-  
 
 const App = () => {
   return (
     <ErrorBoundary>
       <BrowserRouter>
-        <AppRoutes />
-        <Toaster 
-          position="top-right"
-          toastOptions={{
-            duration: 4000,
-            style: {
-              background: '#363636',
-              color: '#fff',
-            },
-          }}
-        />
+        <AuthProvider>
+          <AppRoutes />
+          <Toaster 
+            position="top-right"
+            toastOptions={{
+              duration: 4000,
+              style: {
+                background: '#363636',
+                color: '#fff',
+              },
+            }}
+          />
+        </AuthProvider>
       </BrowserRouter>
     </ErrorBoundary>
   );

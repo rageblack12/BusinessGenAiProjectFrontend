@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../context/AuthContext';
 import { USER_ROLES } from '../constants/roles';
 import LoginForm from '../components/forms/LoginForm';
 
@@ -13,13 +13,8 @@ const Login = () => {
     setLoading(true);
     const result = await login(data.email, data.password);
     
-    if (result.success && result.user?.role) {
-      // Add a small delay to ensure token is saved and state is updated
-      setTimeout(() => {
-        navigate(result.user.role === USER_ROLES.ADMIN ? '/admin' : '/dashboard');
-      }, 150);
-    } else {
-      console.error("Login result invalid or role missing:", result);
+    if (result.success) {
+      navigate(result.user.role === USER_ROLES.ADMIN ? '/admin' : '/dashboard');
     }
     
     setLoading(false);
