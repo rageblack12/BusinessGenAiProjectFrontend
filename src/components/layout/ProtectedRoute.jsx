@@ -19,12 +19,12 @@ const ProtectedRoute = ({
   }
   
   if (!token) {
-    console.log("HI");
+    console.log("No Token");
     return <Navigate to="/login" />;
   }
 
   if (!user) {
-    console.log("ho");
+    console.log("No user");
     return <Navigate to="/login" replace />;
   }
 
