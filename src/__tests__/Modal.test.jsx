@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom';
+import '@testing-library/jest-dom/vitest';
+import { vi } from 'vitest';
 import Modal from '../components/ui/Modal';
 
 describe('Modal Component', () => {
@@ -24,13 +25,13 @@ describe('Modal Component', () => {
   });
 
   test('calls onClose when close button is clicked', () => {
-    const mockOnClose = jest.fn();
+    const mockOnClose = vi.fn();
     render(
       <Modal isOpen={true} title="Test Modal" onClose={mockOnClose}>
         <div>Modal content</div>
       </Modal>
     );
-    
+
     const closeButton = screen.getByText('×');
     fireEvent.click(closeButton);
     expect(mockOnClose).toHaveBeenCalledTimes(1);
@@ -42,7 +43,7 @@ describe('Modal Component', () => {
         <div>Content</div>
       </Modal>
     );
-    
+
     let modal = screen.getByText('Content').closest('.max-w-md');
     expect(modal).toBeInTheDocument();
 
@@ -51,7 +52,7 @@ describe('Modal Component', () => {
         <div>Content</div>
       </Modal>
     );
-    
+
     modal = screen.getByText('Content').closest('.max-w-4xl');
     expect(modal).toBeInTheDocument();
   });
