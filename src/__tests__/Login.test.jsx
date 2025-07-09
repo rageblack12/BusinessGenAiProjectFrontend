@@ -1,21 +1,28 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import '@testing-library/jest-dom';
+import '@testing-library/jest-dom/vitest';
 import Login from '../pages/Login';
-import { useAuth } from '../hooks/useAuth';
+import { vi } from 'vitest';
 
-// Mock the useAuth hook - this will override the setup.jsx mock for this test
-jest.mock('../context/AuthContext');
+// Mock AuthContext
+vi.mock('../context/AuthContext', () => {
+  return {
+    useAuth: vi.fn(),
+  };
+});
+
+// Mock react-router-dom's useNavigate
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
+  return {
+    ...actual,
+    useNavigate: () => vi.fn(),
+  };
+});
 
 describe('Login Component', () => {
-  const mockLogin = jest.fn();
-  const mockNavigate = jest.fn();
-
-  // Mock useNavigate
-  jest.mock('react-router-dom', () => ({
-    ...jest.requireActual('react-router-dom'),
-    useNavigate: () => mockNavigate,
-  }));
+  const mockLogin = vi.fn();
+  const mockNavigate = vi.fn();
 
   beforeEach(() => {
     const { useAuth } = require('../context/AuthContext');
@@ -23,6 +30,7 @@ describe('Login Component', () => {
       login: mockLogin,
       loading: false,
     });
+
     mockLogin.mockClear();
     mockNavigate.mockClear();
   });
