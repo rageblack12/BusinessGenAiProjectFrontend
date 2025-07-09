@@ -18,6 +18,7 @@ const LoginForm = ({ onSubmit, loading }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <Input
+        id="email"
         label="Email"
         type="email"
         required
@@ -26,6 +27,7 @@ const LoginForm = ({ onSubmit, loading }) => {
       />
 
       <Input
+        id="password"
         label="Password"
         type="password"
         required

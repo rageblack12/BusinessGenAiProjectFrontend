@@ -44,7 +44,7 @@ describe('Register Component', () => {
   test('renders register form', () => {
     renderRegister();
 
-    expect(screen.getByText('Register')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /register/i })).toBeInTheDocument();
     expect(screen.getByLabelText(/full name/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/^password/i)).toBeInTheDocument();

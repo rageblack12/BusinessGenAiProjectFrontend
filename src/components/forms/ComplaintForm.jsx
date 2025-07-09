@@ -37,6 +37,7 @@ const ComplaintForm = ({ onSubmit, loading }) => {
 
       <form onSubmit={handleSubmit(handleFormSubmit)} className="w-full md:w-1/2 space-y-6">
         <Input
+          id="orderId"
           label="Order ID"
           placeholder="e.g., ORD-12345"
           required

@@ -24,7 +24,7 @@ describe('ProtectedRoute Component', () => {
         <div>Protected content</div>
       </ProtectedRoute>
     );
-    expect(screen.getByRole('generic')).toBeInTheDocument(); // LoadingSpinner
+    expect(screen.getByRole('status', { name: 'Loading' })).toBeInTheDocument(); // LoadingSpinner
   });
 
   test('redirects to login when no token', () => {
