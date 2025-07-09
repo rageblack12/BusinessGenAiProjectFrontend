@@ -47,7 +47,13 @@ const ViewPosts = () => {
           ...post,
           comments: post.comments?.map(comment => 
             comment._id === commentId
-              ? { ...comment, replies: [...(comment.replies || []), newReply] }
+              ? { 
+                  ...comment, 
+                  replies: [...(comment.replies || []), {
+                    ...newReply,
+                    user: newReply.user || { name: 'You' } // Fallback for current user
+                  }] 
+                }
               : comment
           ) || []
         }))
@@ -65,13 +71,19 @@ const ViewPosts = () => {
     
     try {
       const response = await postService.addComment(postId, content);
-      const newComment = response.data.comment;
+      const newComment = response.data.comment || response.data;
       
       // Update posts state locally instead of reloading all posts
       setPosts(prevPosts => 
         prevPosts.map(post => 
           post._id === postId 
-            ? { ...post, comments: [...(post.comments || []), newComment] }
+            ? { 
+                ...post, 
+                comments: [...(post.comments || []), {
+                  ...newComment,
+                  user: newComment.user || { name: 'You' } // Fallback for current user
+                }] 
+              }
             : post
         )
       );
@@ -88,7 +100,7 @@ const ViewPosts = () => {
 
   if (loading) return <LoadingSpinner size="lg" />;
 
-  return (
+      const newReply = response.data.reply || response.data;
     <div className="p-4">
       <h2 className="text-2xl font-bold mb-6">Latest Posts</h2>
 

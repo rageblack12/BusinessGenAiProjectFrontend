@@ -97,13 +97,19 @@ const PostManager = () => {
     
     try {
       const response = await postService.addComment(postId, content);
-      const newComment = response.data.comment;
+      const newComment = response.data.comment || response.data;
       
       // Update posts state locally instead of reloading all posts
       setPosts(prevPosts => 
         prevPosts.map(post => 
           post._id === postId 
-            ? { ...post, comments: [...(post.comments || []), newComment] }
+            ? { 
+                ...post, 
+                comments: [...(post.comments || []), {
+                  ...newComment,
+                  user: newComment.user || { name: 'You' } // Fallback for current user
+                }] 
+              }
             : post
         )
       );
@@ -124,7 +130,7 @@ const PostManager = () => {
     
     try {
       const response = await postService.addReply(commentId, content);
-      const newReply = response.data.reply;
+      const newReply = response.data.reply || response.data;
       
       // Update posts state locally instead of reloading all posts
       setPosts(prevPosts => 
@@ -132,7 +138,13 @@ const PostManager = () => {
           ...post,
           comments: post.comments?.map(comment => 
             comment._id === commentId
-              ? { ...comment, replies: [...(comment.replies || []), newReply] }
+              ? { 
+                  ...comment, 
+                  replies: [...(comment.replies || []), {
+                    ...newReply,
+                    user: newReply.user || { name: 'You' } // Fallback for current user
+                  }] 
+                }
               : comment
           ) || []
         }))

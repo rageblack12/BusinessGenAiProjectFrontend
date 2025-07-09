@@ -29,11 +29,13 @@ export const postService = {
   },
 
   addComment: async (postId, content) => {
-    return await api.post(API_ROUTES.CREATE_COMMENT, { content, postId });
+    const response = await api.post(API_ROUTES.CREATE_COMMENT, { content, postId });
+    return response;
   },
 
   addReply: async (commentId, content) => {
-    return await api.post(API_ROUTES.CREATE_REPLY, { commentId, content });
+    const response = await api.post(API_ROUTES.CREATE_REPLY, { commentId, content });
+    return response;
   },
 
   getSuggestedReply: async (sentiment, description) => {
