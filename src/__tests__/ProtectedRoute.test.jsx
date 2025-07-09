@@ -1,14 +1,18 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
+import '@testing-library/jest-dom/vitest';
+import { vi } from 'vitest';
 import ProtectedRoute from '../components/layout/ProtectedRoute';
 import { USER_ROLES } from '../constants/roles';
 
-// Mock Navigate component
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  Navigate: ({ to }) => <div data-testid="navigate" data-to={to}>Redirecting to {to}</div>,
-}));
+// Mock Navigate component for Vitest
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
+  return {
+    ...actual,
+    Navigate: ({ to }) => <div data-testid="navigate" data-to={to}>Redirecting to {to}</div>,
+  };
+});
 
 describe('ProtectedRoute Component', () => {
   const mockUser = { id: '1', name: 'Test User', role: USER_ROLES.USER };
@@ -20,7 +24,6 @@ describe('ProtectedRoute Component', () => {
         <div>Protected content</div>
       </ProtectedRoute>
     );
-    
     expect(screen.getByRole('generic')).toBeInTheDocument(); // LoadingSpinner
   });
 
@@ -30,7 +33,6 @@ describe('ProtectedRoute Component', () => {
         <div>Protected content</div>
       </ProtectedRoute>
     );
-    
     expect(screen.getByTestId('navigate')).toHaveAttribute('data-to', '/login');
   });
 
@@ -40,7 +42,6 @@ describe('ProtectedRoute Component', () => {
         <div>Protected content</div>
       </ProtectedRoute>
     );
-    
     expect(screen.getByTestId('navigate')).toHaveAttribute('data-to', '/login');
   });
 
@@ -50,7 +51,6 @@ describe('ProtectedRoute Component', () => {
         <div>Protected content</div>
       </ProtectedRoute>
     );
-    
     expect(screen.getByText('Protected content')).toBeInTheDocument();
   });
 
@@ -60,7 +60,6 @@ describe('ProtectedRoute Component', () => {
         <div>Admin content</div>
       </ProtectedRoute>
     );
-    
     expect(screen.getByTestId('navigate')).toHaveAttribute('data-to', '/dashboard');
   });
 
@@ -71,7 +70,6 @@ describe('ProtectedRoute Component', () => {
         <div>Admin content</div>
       </ProtectedRoute>
     );
-    
     expect(screen.getByText('Admin content')).toBeInTheDocument();
   });
 });
